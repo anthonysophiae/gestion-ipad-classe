@@ -1,0 +1,1151 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Labo iPad en classe</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout : en-tête blanc logo à gauche, onglets ; simulateur = colonne de commandes | classe d'iPad | missions */
+:root{
+  --violet:#5C3A98; --violet-vif:#6117A7; --gris:#686867; --anthracite:#343435; --noir:#111;
+  --v50:#AE9CCC; --v25:#D6CEE5; --v10:#EFEBF5; --v6:#F5F3F9; --gris-clair:#F0F0F0; --blanc:#fff;
+  --bleugris:#4A6A8A; --sable:#B89B72; --ok:#2F7D55;
+  --font:"Montserrat",Arial,Helvetica,sans-serif;
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--blanc);color:var(--noir);font-family:var(--font);font-size:15px;line-height:1.55}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--violet-vif);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* En-tête */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--blanc);border-bottom:1px solid var(--v25)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--blanc)}
+.top .wrap{display:flex;align-items:center;gap:24px;padding-block:12px;flex-wrap:wrap}
+.logo{height:34px;width:auto;display:block}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+nav.tabs button{border:0;background:none;padding:9px 16px;border-radius:10px;color:var(--anthracite);font-weight:500}
+nav.tabs button:hover{background:var(--v6)}
+nav.tabs button[aria-current="page"]{background:var(--violet-vif);color:#fff}
+.prog-pill{font-size:12px;color:var(--gris);display:flex;align-items:center;gap:8px}
+.bar{width:90px;height:6px;background:var(--v25);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--violet);width:0;transition:width .4s}
+
+h1,h2,h3{color:var(--violet);text-wrap:balance;margin:0}
+.eyebrow{text-transform:uppercase;letter-spacing:.08em;font-weight:700;font-size:12px;color:var(--violet)}
+.muted{color:var(--gris)}
+
+/* Accueil */
+.hero{background:var(--v6);border-bottom:1px solid var(--v25)}
+.hero .wrap{padding-block:56px 48px;display:grid;gap:18px;text-align:center;justify-items:center}
+.hero h1{font-size:clamp(26px,4vw,40px);text-transform:uppercase;letter-spacing:.02em}
+.hero p{max-width:640px;margin:0;font-size:17px;font-weight:500}
+.home-body{padding-block:48px 72px;display:grid;gap:48px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.card{background:#fff;box-shadow:var(--shadow);border-radius:4px;padding:28px;display:grid;gap:14px;align-content:start}
+.card h2{font-size:18px;text-transform:uppercase;letter-spacing:.04em}
+.card ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.btn{border:0;border-radius:11px;background:var(--violet-vif);color:#fff;padding:11px 18px;font-weight:500;justify-self:start}
+.btn:hover{background:var(--violet)}
+.btn.sec{background:#fff;color:var(--violet);border:2px solid var(--violet);padding:9px 16px}
+.btn.sec:hover{background:var(--v10)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.step{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start}
+.step b.n{width:32px;height:32px;border-radius:50%;background:var(--violet);color:#fff;display:grid;place-items:center;font-size:14px}
+.step p{margin:2px 0 0}
+.note{background:var(--v10);border-left:4px solid var(--violet);padding:16px 20px;font-size:14px}
+.note strong{color:var(--violet);text-transform:uppercase;font-size:12px;letter-spacing:.06em;display:block;margin-bottom:4px}
+
+/* Simulateur */
+.sim{padding-block:24px 64px;display:grid;grid-template-columns:290px minmax(0,1fr) 290px;gap:24px;align-items:start}
+@media (max-width:1100px){.sim{grid-template-columns:270px minmax(0,1fr)}.missions{grid-column:1 / -1}}
+@media (max-width:760px){.sim{grid-template-columns:minmax(0,1fr)}}
+.panel{background:#fff;box-shadow:var(--shadow);border-radius:4px;padding:18px;display:grid;gap:14px;min-width:0}
+.panel h2{font-size:15px;text-transform:uppercase;letter-spacing:.05em}
+.panel h3{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--gris)}
+.target{background:var(--v10);border-radius:8px;padding:10px 12px;font-size:13px}
+.target b{color:var(--violet)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.act{border:1px solid var(--v25);background:#fff;border-radius:10px;padding:10px 8px;display:grid;justify-items:center;gap:4px;font-size:12.5px;font-weight:600;color:var(--anthracite)}
+.act svg{width:22px;height:22px;stroke:var(--violet);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.act:hover{border-color:var(--violet);background:var(--v6)}
+.act.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.act.on svg{stroke:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--v25);background:#fff;border-radius:999px;padding:5px 11px;font-size:12.5px}
+.chip:hover{border-color:var(--violet)}
+.chip.on{background:var(--violet);border-color:var(--violet);color:#fff}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+input[type=text],select{border:1px solid var(--v25);border-radius:8px;padding:8px 10px;background:#fff;min-width:0;flex:1}
+.toggle{display:flex;align-items:center;gap:10px;font-size:13px}
+.toggle input{width:18px;height:18px;accent-color:var(--violet-vif)}
+
+/* Classe */
+.classhead{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.classhead h2{font-size:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:16px}
+.ipad{border:0;background:none;padding:0;text-align:left;display:grid;gap:6px;position:relative}
+.frame{background:var(--anthracite);border-radius:12px;padding:6px;aspect-ratio:4/3;max-width:100%;transition:box-shadow .15s,transform .15s}
+.ipad:hover .frame{transform:translateY(-2px)}
+.ipad.sel .frame{box-shadow:0 0 0 3px var(--violet-vif)}
+.screen{position:relative;height:100%;border-radius:7px;overflow:hidden;background:var(--v6);display:grid;place-items:center;text-align:center;font-size:11px;font-weight:600;color:#fff}
+.screen .ico{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px;font-weight:700;background:rgba(255,255,255,.25);margin:0 auto 4px}
+.screen .url{position:absolute;top:4px;left:6px;right:6px;background:rgba(255,255,255,.92);color:var(--anthracite);border-radius:4px;font-size:9px;padding:1px 4px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-screen{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:10px;width:100%;align-self:stretch}
+.home-screen span{aspect-ratio:1;border-radius:4px;background:var(--v50)}
+.home-screen span:nth-child(3n){background:var(--bleugris)}
+.home-screen span:nth-child(4n){background:var(--violet)}
+.home-screen span.off{background:rgba(0,0,0,.08)}
+.overlay{position:absolute;inset:0;background:rgba(52,52,53,.88);display:grid;place-items:center;align-content:center;gap:4px;font-size:10px;color:#fff;padding:6px}
+.overlay svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8}
+.who{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--anthracite)}
+.badges{display:flex;gap:4px}
+.badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:999px;background:var(--v10);color:var(--violet);white-space:nowrap}
+.badge.warn{background:#F6EEDC;color:#7A5A22}
+.badge.ok{background:#E3F1E9;color:var(--ok)}
+.blink{animation:blink 1s ease 3}
+@keyframes blink{50%{box-shadow:0 0 0 4px var(--sable)}}
+
+.projector{background:var(--anthracite);border-radius:6px;padding:14px;display:grid;gap:10px;color:#fff}
+.projector .big{aspect-ratio:16/9;max-width:100%;border-radius:6px;overflow:hidden}
+.projector .big .screen{font-size:18px}
+.projector .big .screen .ico{width:64px;height:64px;font-size:30px;border-radius:16px}
+.projector .row{justify-content:space-between}
+.projector .btn{background:#fff;color:var(--violet)}
+
+/* Missions */
+.missions ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.missions li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;font-size:13.5px}
+.missions li .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--v25);display:grid;place-items:center;font-size:12px;color:#fff;font-weight:700}
+.missions li.done .ck{background:var(--violet);border-color:var(--violet)}
+.missions li.done .t{color:var(--gris)}
+.missions li .t b{display:block;color:var(--anthracite)}
+.missions li.done .t b{text-decoration:line-through;color:var(--gris)}
+.hint{font-size:12px;color:var(--gris)}
+
+/* Leçons Jamf */
+.lesson{border:1px solid var(--v25);border-radius:8px;padding:12px;display:grid;gap:8px}
+.lesson.active{border-color:var(--violet);background:var(--v6)}
+.lesson header{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.lesson header b{color:var(--violet);font-size:14px}
+.lesson .meta{font-size:12px;color:var(--gris)}
+.appchk{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:12.5px}
+.appchk label{display:flex;gap:6px;align-items:center}
+.appchk input{accent-color:var(--violet-vif)}
+
+/* Fenêtre */
+.modal{position:fixed;inset:0;background:rgba(52,52,53,.45);display:grid;place-items:center;z-index:50;padding:16px}
+.dialog{background:#fff;border-radius:6px;max-width:520px;width:100%;max-height:85vh;overflow:auto;padding:24px;display:grid;gap:16px;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.dialog h2{font-size:18px}
+.applist{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.appbtn{border:1px solid var(--v25);background:#fff;border-radius:10px;padding:10px;display:grid;justify-items:center;gap:6px;font-size:12.5px;font-weight:600}
+.appbtn:hover,.appbtn.on{border-color:var(--violet-vif);background:var(--v6)}
+.appbtn i{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:700}
+
+.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:60;max-width:340px}
+.toast{background:var(--anthracite);color:#fff;padding:12px 16px;border-radius:8px;font-size:13.5px;box-shadow:var(--shadow);animation:in .25s ease}
+.toast.win{background:var(--violet)}
+@keyframes in{from{transform:translateY(8px);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* Portail */
+.portal{padding-block:40px 72px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+.door{background:#fff;box-shadow:var(--shadow);border-radius:4px;padding:32px;display:grid;gap:16px;align-content:start;text-decoration:none;color:inherit;border-top:6px solid var(--violet)}
+.door.alt{border-top-color:var(--v50)}
+.door .pic{width:56px;height:56px;border-radius:50%;background:var(--v10);display:grid;place-items:center}
+.door .pic svg{width:28px;height:28px;stroke:var(--violet);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.door h2{font-size:20px;text-transform:uppercase;letter-spacing:.04em}
+.door p{margin:0}
+.door .btn{font-size:16px;padding:13px 22px;display:inline-flex;gap:8px;align-items:center;text-decoration:none}
+.door .figs{display:flex;gap:28px;flex-wrap:wrap}
+.door .figs b{display:block;font-size:28px;color:var(--violet);line-height:1.1}
+.door .figs span{font-size:12.5px;color:var(--gris)}
+
+/* Tutoriels */
+.tuto{padding-block:32px 72px;display:grid;gap:36px}
+.subtabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--v25);padding-bottom:12px}
+.phases{display:grid;gap:36px}
+.phase{display:grid;gap:14px}
+.phase-h{display:flex;align-items:center;gap:14px}
+.phase-h h2{font-size:13px;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.phase-h::after{content:"";flex:1;height:1px;background:var(--v25)}
+.stepcard{background:#fff;box-shadow:var(--shadow);border-radius:4px;padding:22px 24px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:18px;align-items:start}
+.stepcard .n{width:40px;height:40px;border-radius:50%;background:var(--violet);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
+.stepcard .body{display:grid;gap:10px;min-width:0}
+.stepcard h3{font-size:17px;margin:8px 0 0;line-height:1.3}
+.stepcard p{margin:0;max-width:66ch}
+.stepcard ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:66ch}
+.stepcard ul li{position:relative;padding-left:20px;font-size:14.5px}
+.stepcard ul li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--violet)}
+.stepcard ul li b{color:var(--anthracite)}
+.simlink{justify-self:start;display:inline-flex;align-items:center;gap:8px;border:2px solid var(--violet);color:var(--violet);background:#fff;border-radius:10px;padding:6px 14px;font-size:13px;font-weight:600;margin-top:4px}
+.simlink:hover{background:var(--v10)}
+.simlink svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:520px){.stepcard{grid-template-columns:minmax(0,1fr);padding:18px}.stepcard .n{width:34px;height:34px;font-size:14px}.stepcard h3{margin-top:0}}
+.tutogrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
+@media (max-width:900px){.tutogrid{grid-template-columns:minmax(0,1fr)}}
+.side{display:grid;gap:16px;position:sticky;top:90px}
+.cmp{width:100%;border-collapse:collapse;font-size:14px}
+.cmpwrap{overflow-x:auto}
+.cmp th{background:var(--violet);color:#fff;text-align:left;padding:10px 12px;font-weight:700}
+.cmp td{padding:10px 12px;vertical-align:top;border-bottom:1px solid var(--v25)}
+.cmp tr:nth-child(even) td{background:var(--v6)}
+.cmp td:first-child{font-weight:600;color:var(--anthracite);min-width:130px}
+.scen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:980px){.scen{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.scen{grid-template-columns:minmax(0,1fr)}}
+.scen .card h3{font-size:17px;line-height:1.3}
+.scen ol{margin:0;padding-left:18px;display:grid;gap:4px;font-size:14px}
+.lvl{display:flex;gap:6px;flex-wrap:wrap}
+.lvl span{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--v10);color:var(--violet);text-transform:uppercase;letter-spacing:.05em}
+.lvl span.tool{background:var(--gris-clair);color:var(--anthracite)}
+/* ===== Simulateurs façon iPad ===== */
+.sv{padding-block:28px 72px;display:grid;gap:28px}
+.sv-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap}
+.sv-head h1{font-size:clamp(22px,3vw,30px)}
+.sv-main{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:28px;align-items:start}
+@media (max-width:1100px){.sv-main{grid-template-columns:minmax(0,1fr)}}
+.sv-side{display:grid;gap:20px}
+.sv-side .panel{background:#fff;box-shadow:var(--shadow);border-radius:4px;padding:18px;display:grid;gap:12px}
+.sv-side h2{font-size:15px;text-transform:uppercase;letter-spacing:.05em}
+.sv-side ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.sv-side li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:13.5px}
+.sv-side .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--v25);display:grid;place-items:center;font-size:12px;color:#fff;font-weight:700}
+.sv-side li.done .ck{background:var(--violet);border-color:var(--violet)}
+.sv-side li .t b{display:block;color:var(--anthracite)}
+.sv-side li.done .t b{text-decoration:line-through;color:var(--gris)}
+.sv-side .tg{display:flex;align-items:center;gap:10px;font-size:13px}
+.sv-side .tg input{width:18px;height:18px;accent-color:var(--violet-vif)}
+
+/* Appareil */
+.dev{--ios:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif;font-family:var(--ios);background:linear-gradient(145deg,#2b2b2e,#151517);border-radius:38px;padding:16px;position:relative;box-shadow:0 0 0 1.5px #4a4a4e inset,0 24px 60px rgba(30,20,50,.28);max-width:100%}
+.dev::before{content:"";position:absolute;top:6px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#0b0b0c;box-shadow:0 0 0 1px #333}
+.dev-scr{border-radius:22px;overflow:hidden;background:#F2F2F7;position:relative;color:#000;letter-spacing:-.01em}
+.dev.t .dev-scr{aspect-ratio:1.43;display:flex;flex-direction:column}
+@media (max-width:820px){.dev.t .dev-scr{aspect-ratio:auto;height:760px}.dev{border-radius:28px;padding:10px}.dev-scr{border-radius:18px}}
+
+.t-sb{height:24px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 20px;font-size:12.5px;font-weight:600;background:#F2F2F7}
+.t-sb .r{display:flex;gap:6px;align-items:center}
+.t-split{flex:1;min-height:0;display:flex}
+.t-side{width:236px;flex:none;background:#F2F2F7;border-right:1px solid #DADADF;overflow:auto;padding:4px 12px 16px}
+.t-side h1{font-family:var(--ios);font-size:28px;font-weight:700;color:#000;margin:6px 6px 10px;letter-spacing:-.02em}
+.t-sec{font-size:12px;font-weight:600;color:#8A8A8E;text-transform:uppercase;letter-spacing:.02em;margin:14px 8px 6px}
+.t-list{background:#fff;border-radius:10px;overflow:hidden}
+.t-row{width:100%;border:0;background:none;display:flex;align-items:center;gap:10px;padding:9px 12px;font:inherit;font-size:15px;color:#000;text-align:left;border-bottom:1px solid #EFEFF4;cursor:pointer}
+.t-row:last-child{border-bottom:0}
+.t-row .cnt{margin-left:auto;color:#8A8A8E;font-size:14px}
+.t-row.on{background:#007AFF;color:#fff}
+.t-row.on .cnt{color:rgba(255,255,255,.85)}
+.t-row.add{color:#007AFF}
+.t-row .ci{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;flex:none}
+.t-row svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.t-main{flex:1;min-width:0;background:#fff;display:flex;flex-direction:column}
+.t-nav{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 20px 6px;flex-wrap:wrap}
+.t-nav .ttl{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+.t-nav .sub{font-size:13px;color:#8A8A8E}
+.t-nav .btns{display:flex;gap:16px;align-items:center;padding-top:6px}
+.tb{border:0;background:none;color:#007AFF;font:inherit;font-size:16px;padding:0;cursor:pointer}
+.tb.red{color:#FF3B30}
+.tb.bold{font-weight:600}
+.tb:disabled{color:#C7C7CC;cursor:default}
+.t-acts{display:flex;gap:18px;padding:8px 20px 14px;border-bottom:1px solid #EFEFF4;overflow-x:auto;flex:none}
+.t-act{border:0;background:none;display:grid;justify-items:center;gap:5px;font:inherit;font-size:12px;color:#3C3C43;cursor:pointer;min-width:58px}
+.t-act span{width:46px;height:46px;border-radius:50%;background:#EEF4FF;display:grid;place-items:center}
+.t-act svg{width:23px;height:23px;stroke:#007AFF;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.t-act.on span{background:#007AFF}
+.t-act.on svg{stroke:#fff}
+.t-act:disabled{opacity:.35;cursor:default}
+.t-body{flex:1;min-height:0;overflow:auto;padding:16px 20px 24px}
+.t-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:14px 12px}
+.sc{border:0;background:none;padding:8px 4px;border-radius:14px;display:grid;justify-items:center;gap:6px;cursor:pointer;font:inherit;position:relative}
+.sc:hover{background:#F2F2F7}
+.sc.sel{background:#E5F0FF}
+.sc .av{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:24px;font-weight:600;position:relative}
+.sc .av .ai{position:absolute;right:-6px;bottom:-4px;font-size:9px;box-shadow:0 0 0 2.5px #fff}
+.sc .thumb{width:72px;border-radius:7px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.12),0 2px 6px rgba(0,0,0,.12)}
+.sc .nm{font-size:14px;font-weight:500;color:#000}
+.sc .st{font-size:11.5px;color:#8A8A8E;margin-top:-5px;text-align:center;line-height:1.25}
+.sc .st.warn{color:#FF9500;font-weight:600}
+.sc .chk{position:absolute;top:6px;right:10px;width:22px;height:22px;border-radius:50%;border:1.5px solid #C7C7CC;background:#fff;display:grid;place-items:center}
+.sc.sel .chk{background:#007AFF;border-color:#007AFF}
+.sc .chk svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:3}
+.sc .lockb{position:absolute;right:-4px;bottom:-2px;width:24px;height:24px;border-radius:50%;background:#3C3C43;display:grid;place-items:center;box-shadow:0 0 0 2.5px #fff}
+.sc .lockb svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2}
+
+/* Jamf : tableau */
+.j-seg{display:inline-flex;background:#E9E9EB;border-radius:9px;padding:2px;margin:0 20px 8px;align-self:flex-start}
+.j-seg button{border:0;background:none;font:inherit;font-size:13.5px;font-weight:500;padding:5px 18px;border-radius:7px;cursor:pointer;color:#000}
+.j-seg button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.j-tools{display:flex;gap:8px;padding:6px 20px 12px;flex-wrap:wrap;border-bottom:1px solid #EFEFF4;flex:none}
+.pb{border:0;border-radius:999px;background:#EEF4FF;color:#007AFF;font:inherit;font-size:13.5px;font-weight:600;padding:8px 14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.pb svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pb.solid{background:#007AFF;color:#fff}
+.pb.red{background:#FFEBEA;color:#FF3B30}
+.pb:disabled{opacity:.4;cursor:default}
+.j-table{background:#fff;border-radius:10px;border:1px solid #EFEFF4;overflow:hidden}
+.j-row{width:100%;border:0;background:#fff;display:grid;grid-template-columns:24px 36px minmax(0,1fr) auto 56px;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #EFEFF4;font:inherit;text-align:left;cursor:pointer}
+.j-row:last-child{border-bottom:0}
+.j-row:hover{background:#FAFAFC}
+.j-row.sel{background:#EEF4FF}
+.j-row .chk{width:22px;height:22px;border-radius:50%;border:1.5px solid #C7C7CC;display:grid;place-items:center}
+.j-row.sel .chk{background:#007AFF;border-color:#007AFF}
+.j-row .chk svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:3}
+.j-row .av{width:36px;height:36px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:600;font-size:14px}
+.j-row b{font-weight:600;font-size:15px;display:block}
+.j-row small{color:#8A8A8E;font-size:12px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:#F2F2F7;color:#3C3C43;white-space:nowrap}
+.pill.on{background:#E3F7E8;color:#1E8E3E}
+.pill.warn{background:#FFF1DE;color:#C26A00}
+.pill.attn{background:#EFE7FB;color:#6A3FB5}
+.bat{display:flex;align-items:center;gap:4px;font-size:12px;color:#8A8A8E;justify-content:flex-end}
+.j-lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.j-card{background:#fff;border:1px solid #EFEFF4;border-radius:12px;padding:14px;display:grid;gap:10px}
+.j-card.act{border-color:#34C759;box-shadow:0 0 0 1px #34C759}
+.j-card h3{font-family:var(--ios);color:#000;font-size:16px;font-weight:600;margin:0}
+.j-card .icons{display:flex;gap:6px;flex-wrap:wrap;font-size:9px}
+.j-card .meta{font-size:12.5px;color:#8A8A8E;line-height:1.45}
+
+/* Feuilles modales dans l'iPad */
+.sh-bg{position:absolute;inset:0;background:rgba(0,0,0,.28);display:grid;place-items:center;z-index:5;padding:16px}
+.sheet{background:#F2F2F7;border-radius:14px;width:min(430px,100%);max-height:100%;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.sheet.wide{width:min(620px,100%)}
+.sh-h{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 16px;background:#F7F7F8;border-bottom:1px solid #DADADF;gap:8px}
+.sh-h b{font-size:16px;font-weight:600;text-align:center}
+.sh-h .tb:last-child{justify-self:end}
+.sh-b{overflow:auto;padding:14px 16px 18px;display:grid;gap:12px}
+.sh-sec{font-size:12px;color:#8A8A8E;text-transform:uppercase;margin:4px 6px -6px}
+.grp{background:#fff;border-radius:10px;overflow:hidden}
+.grp .gi{width:100%;border:0;background:#fff;display:flex;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid #EFEFF4;font:inherit;font-size:15px;text-align:left;cursor:pointer;color:#000}
+.grp .gi:last-child{border-bottom:0}
+.grp .gi .ai{font-size:8px}
+.grp .gi .tick{margin-left:auto;color:#007AFF;font-weight:700}
+.grp .gi input[type=text]{border:0;font:inherit;flex:1;outline:none;background:none;padding:2px 0}
+.grp .gi.red{color:#FF3B30;justify-content:center}
+.grp .gi.blue{color:#007AFF}
+.grp label.gi{cursor:pointer}
+.sw{appearance:none;-webkit-appearance:none;width:46px;height:28px;border-radius:999px;background:#E9E9EB;position:relative;margin-left:auto;flex:none;cursor:pointer;transition:background .2s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .2s}
+.sw:checked{background:#34C759}
+.sw:checked::after{transform:translateX(18px)}
+.chipsrow{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.chipsrow button{border:0;border-radius:999px;background:#fff;font:inherit;font-size:13px;padding:6px 12px;white-space:nowrap;cursor:pointer;color:#000}
+.chipsrow button.on{background:#007AFF;color:#fff}
+.segc{display:flex;background:#E3E3E8;border-radius:9px;padding:2px}
+.segc button{flex:1;border:0;background:none;font:inherit;font-size:13px;padding:6px 4px;border-radius:7px;cursor:pointer;color:#000}
+.segc button.on{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.15);font-weight:600}
+.sh-note{font-size:12.5px;color:#8A8A8E;margin:0 6px}
+.detail{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start}
+.detail .bigscr{border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+@media (max-width:520px){.detail{grid-template-columns:1fr}.detail .bigscr{width:150px;justify-self:center}}
+
+/* Écrans élèves (mise à l'échelle par container query) */
+.sscr{aspect-ratio:3/4;container-type:inline-size;position:relative;overflow:hidden;background:#000}
+.scr{position:absolute;inset:0;font-size:5.6cqw;display:flex;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;color:#000;line-height:1.2;text-align:left}
+.ai{width:2.8em;height:2.8em;border-radius:.66em;display:inline-grid;place-items:center;color:#fff;font-weight:700;flex:none;font-size:inherit;line-height:1}
+.ai i{font-style:normal;font-size:1.25em}
+.s-sb{height:1.9em;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 1.1em;font-size:.82em;font-weight:600;color:#fff;position:relative;z-index:2}
+.s-sb.dk{color:#000}
+.s-sb .r{display:flex;gap:.35em;align-items:center}
+.s-sb .bt{width:1.9em;height:.9em;border:.12em solid currentColor;border-radius:.25em;position:relative;opacity:.9}
+.s-sb .bt::after{content:"";position:absolute;inset:.1em;width:70%;background:currentColor;border-radius:.1em}
+.s-sb .obs{background:#0A84FF;color:#fff;border-radius:.6em;padding:0 .45em;font-size:.85em;line-height:1.4}
+.s-sb .wf{width:1.1em;height:.8em;background:currentColor;clip-path:polygon(50% 100%,0 25%,15% 8%,50% 0,85% 8%,100% 25%)}
+.wall{position:absolute;inset:0;background:radial-gradient(circle at 20% 15%,#C9A9F2 0,transparent 45%),radial-gradient(circle at 85% 80%,#6E8BEA 0,transparent 50%),linear-gradient(160deg,#7A55C8,#4B3B9A 55%,#2E2A6E);display:flex;flex-direction:column}
+.hgrid{display:grid;grid-template-columns:repeat(4,2.8em);justify-content:space-between;row-gap:.9em;padding:1.4em 1.5em 0}
+.hi{display:grid;justify-items:center;gap:.25em}
+.hi em{font-style:normal;font-size:.48em;color:#fff;white-space:nowrap;max-width:6.2em;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.dock{margin:auto 1em 1em;background:rgba(255,255,255,.28);backdrop-filter:blur(6px);border-radius:1.1em;padding:.6em .8em;display:flex;justify-content:center;gap:.9em}
+.app{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column}
+.abar{flex:none;padding:.4em 1em .6em;display:flex;align-items:center;gap:.6em;border-bottom:.08em solid #E5E5EA;background:#F9F9FB}
+.abar b{font-size:1em}
+.abar .url{flex:1;background:#E9E9EB;border-radius:.5em;padding:.3em .6em;font-size:.75em;color:#3C3C43;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
+.abody{flex:1;min-height:0;position:relative;overflow:hidden}
+.ln{height:.42em;border-radius:.2em;background:#D9D9DE;margin:.45em 0}
+.blk{position:absolute;border-radius:.3em}
+.lock{position:absolute;inset:0;background:linear-gradient(160deg,#3E2F7A,#1E1A40);color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center}
+.lock .tm{font-size:3.6em;font-weight:600;margin-top:.55em;letter-spacing:-.02em;line-height:1}
+.lock .dt{font-size:.85em;opacity:.85;margin-top:.3em;text-transform:capitalize}
+.lock .msg{margin-top:auto;margin-bottom:1.8em;background:rgba(255,255,255,.16);border-radius:.8em;padding:.7em .9em;font-size:.78em;max-width:82%;display:grid;gap:.4em;justify-items:center}
+.lock .msg svg{width:1.8em;height:1.8em;stroke:#fff;fill:none;stroke-width:2}
+.att{position:absolute;inset:0;background:#5C3A98;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1.2em;gap:.6em}
+.att small{font-size:.65em;opacity:.8;text-transform:uppercase;letter-spacing:.08em}
+.att b{font-size:1.35em;line-height:1.25}
+.pass{position:absolute;inset:0;background:linear-gradient(160deg,#4B3B8A,#22204A);color:#fff;display:flex;flex-direction:column;align-items:center;padding-top:2.6em;gap:.7em}
+.pass .dots{display:flex;gap:.6em}
+.pass .dots i{width:.7em;height:.7em;border-radius:50%;border:.1em solid #fff}
+.pass .keys{display:grid;grid-template-columns:repeat(3,2.6em);gap:.7em .9em;margin-top:.6em}
+.pass .keys i{width:2.6em;height:2.6em;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;font-style:normal;font-size:1.1em}
+.pass .warn{font-size:.62em;opacity:.8}
+
+/* iPad élèves */
+.sd-wrap{display:grid;gap:14px}
+.sd-wrap h2{font-size:20px}
+.sd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:22px 18px}
+.sd{display:grid;gap:8px;justify-items:center}
+.dev.m{border-radius:16px;padding:7px;width:100%;box-shadow:0 0 0 1px #4a4a4e inset,0 8px 20px rgba(30,20,50,.2)}
+.dev.m::before{top:2.5px;width:3.5px;height:3.5px;margin-left:-1.75px}
+.dev.m .dev-scr{border-radius:9px}
+.sd .nm{font-size:13px;font-weight:600;color:var(--anthracite)}
+.sd.flash .dev{animation:flash 1s ease 3}
+@keyframes flash{50%{box-shadow:0 0 0 4px var(--sable),0 8px 20px rgba(30,20,50,.2)}}
+.tv-wrap{display:grid;gap:10px;justify-items:center}
+.tv{width:min(560px,100%);background:#111;border-radius:10px;padding:10px;box-shadow:0 14px 40px rgba(0,0,0,.25)}
+.tv-in{aspect-ratio:16/9;background:#000;border-radius:3px;display:flex;justify-content:center;overflow:hidden}
+.tv-in .sscr{height:100%;width:auto}
+.tv-cap{font-size:13px;color:var(--gris);display:flex;gap:12px;align-items:center}
+
+.lock .s-sb{align-self:stretch}
+@media (max-width:640px){.t-split{flex-direction:column}.t-side{width:auto;max-height:150px;border-right:0;border-bottom:1px solid #DADADF}.t-side h1{display:none}.j-row{grid-template-columns:24px 32px minmax(0,1fr) auto}.j-row .bat{display:none}.t-nav .ttl{font-size:21px}}
+/* Jamf Teacher : accueil en tuiles et classe en panneau */
+.jwrap{flex:1;min-height:0;position:relative;background:#F2F2F7;overflow:hidden}
+.jh{position:absolute;inset:0;overflow:auto;padding:0 22px 22px}
+.jh-top{display:flex;justify-content:space-between;align-items:center;padding:10px 0 12px;border-bottom:1px solid #D1D1D6;margin-bottom:18px}
+.jh-dev{border:0;background:none;font:inherit;font-size:19px;font-weight:600;cursor:pointer;color:#000;padding:0}
+.jh-dev span{font-size:15px;margin-left:2px}
+.jh-gear{border:0;background:none;padding:0;cursor:pointer}
+.jh-gear svg{width:24px;height:24px;stroke:#8E8E93;fill:none;stroke-width:1.6;stroke-linecap:round}
+.jh-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.jt{border:0;border-radius:12px;min-height:190px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;text-align:left;padding:0;overflow:hidden;cursor:pointer;font:inherit;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.jt.orange{background:#FF9500}
+.jt.blue{background:#5AC8FA}
+.jt.green{background:#34C759;min-height:86px;justify-content:flex-start}
+.jt-ic{flex:1;display:grid;place-items:center;padding:14px}
+.jt-ic svg{width:92px;height:92px}
+.jt-t{padding:10px 14px 12px;border-top:1px solid rgba(255,255,255,.4);display:grid;gap:2px}
+.jt-t.top{border-top:0;border-bottom:1px solid rgba(255,255,255,.4)}
+.jt.green .jt-t.top{border-bottom:0}
+.jt-t b{font-size:19px;font-weight:700}
+.jt-t small{font-size:12px;opacity:.92}
+.jcard{background:#fff;border-radius:12px;padding:14px 16px 6px;box-shadow:0 1px 4px rgba(0,0,0,.08);align-self:start}
+.jcard h3{font-family:var(--ios);color:#000;font-size:20px;font-weight:700;margin:0 0 6px}
+.jl-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #EFEFF4}
+.jl-row:last-child{border-bottom:0}
+.jav{width:34px;height:34px;border-radius:50%;color:#fff;display:grid;place-items:center;font-weight:500;font-size:15px;flex:none;position:relative}
+.jav.big{width:60px;height:60px;font-size:22px}
+.jl-n{flex:1;font-size:14px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#000}
+.jpill{border:0;background:#EFEFF4;color:#007AFF;font:inherit;font-size:11px;font-weight:700;border-radius:999px;padding:5px 14px;cursor:pointer;letter-spacing:.03em;white-space:nowrap}
+.jl-add{border:0;background:none;color:#007AFF;font:inherit;font-size:14px;padding:4px 0;cursor:pointer}
+.jblur{position:absolute;inset:0;filter:blur(7px);opacity:.5;pointer-events:none}
+.jpanel{position:absolute;top:14px;bottom:0;left:11%;right:11%;background:#fff;border-radius:14px 14px 0 0;box-shadow:0 10px 40px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden}
+.jp-h{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #EFEFF4}
+.jp-h b{font-size:16px;font-weight:600;color:#000}
+.jp-h .tb{font-size:15px}
+.jp-acts{display:flex;justify-content:center;gap:10px;padding:14px 10px 10px;background:#F7F7F8;flex-wrap:wrap}
+.jact{border:0;background:none;display:grid;justify-items:center;align-content:start;gap:5px;font:inherit;font-size:11px;color:#3C3C43;width:80px;cursor:pointer;text-align:center;line-height:1.2}
+.jact span{width:44px;height:44px;border-radius:50%;background:#6E9B5A;display:grid;place-items:center}
+.jact:hover span{background:#5E8A4B}
+.jact svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.jp-tabs{display:flex;align-items:center;gap:14px;padding:8px 18px;border-bottom:1px solid #EFEFF4;background:#F7F7F8}
+.jp-tabs button{border:0;background:none;display:grid;justify-items:center;gap:3px;font:inherit;font-size:11px;color:#3C3C43;cursor:default;padding:0}
+.jp-tabs button span{width:30px;height:30px;border-radius:50%;background:#C7C7CC;color:#fff;display:grid;place-items:center;font-size:14px}
+.jp-for{margin-left:auto;font-size:12px;color:#8A8A8E}
+.jp-for b{color:#3C3C43}
+.jp-grid{flex:1;min-height:0;overflow:auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px 8px;align-content:start}
+.jstu{border:0;background:none;display:grid;justify-items:center;gap:2px;font:inherit;cursor:pointer;padding:8px 2px;border-radius:12px;min-width:0}
+.jstu:hover{background:#F2F2F7}
+.jstu.sel{background:#E5F0FF}
+.jstu .nm{font-size:13px;color:#000;margin-top:5px}
+.jstu .sub{font-size:11px;color:#8A8A8E;text-align:center;line-height:1.25;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jstu .sub.warn{color:#FF3B30;font-weight:600}
+.dot{position:absolute;right:0;bottom:1px;width:14px;height:14px;border-radius:50%;border:2px solid #fff}
+.dot.warn{background:#FF3B30}
+.dot.ok{background:#34C759}
+.sck{position:absolute;top:-3px;right:-5px;width:22px;height:22px;border-radius:50%;background:#fff;border:1.5px solid #C7C7CC;display:grid;place-items:center}
+.jstu.sel .sck{background:#007AFF;border-color:#007AFF}
+.sck svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:3}
+.jprof{display:flex;gap:12px;align-items:center;background:#fff;border-radius:10px;padding:12px}
+.jprof b{display:block;font-size:16px}
+.jprof small{display:block;color:#8A8A8E;font-size:12px;line-height:1.4}
+.jgrid-apps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 6px;background:#fff;border-radius:10px;padding:14px 8px}
+.japp{border:0;background:none;display:grid;justify-items:center;gap:5px;font:inherit;font-size:10.5px;color:#000;cursor:pointer;min-width:0}
+.japp .ai{font-size:15px}
+.japp span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:820px){.jpanel{left:8px;right:8px;top:8px}.jh{padding:0 12px 16px}.jt{min-height:150px}}
+@media (max-width:560px){.jh-grid{grid-template-columns:1fr}.jact{width:64px;font-size:10px}}
+
+footer{border-top:1px solid var(--v25);padding-block:20px;font-size:12px;color:var(--gris)}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <img class="logo" src="data:image/png;base64,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" alt="Sophiae">
+    <nav class="tabs" aria-label="Sections">
+      <button data-view="accueil">Accueil</button>
+      <button data-view="se-former">Se former</button>
+      <button data-view="tutoriels">Tutoriels</button>
+      <button data-view="enclasse">Simulateur En classe</button>
+      <button data-view="jamf">Simulateur Jamf</button>
+    </nav>
+    <div class="prog-pill"><span id="progTxt">0 / 10 missions</span><span class="bar"><i id="progBar"></i></span></div>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer><div class="wrap">Simulation pédagogique Sophiae. Interfaces simplifiées et non officielles d'En classe (Apple) et de Jamf Teacher (Jamf), conçues pour s'entraîner sans iPad ni compte. Les élèves sont fictifs.</div></footer>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+const ICONS={
+  open:'<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4z"/><path d="M16.5 14v6M13.5 17h6"/>',
+  web:'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  unlock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/>',
+  mute:'<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l4 6M21 9l-4 6"/>',
+  screens:'<rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M9 21h6M12 17v4"/>',
+  airplay:'<path d="M6 17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-2"/><path d="M12 14l5 6H7z"/>',
+  group:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.3c3 .1 5.5 2.4 5.5 5.7"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l3 3M14 9l2 2"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/>',
+  msg:'<path d="M4 5h16v11H9l-5 4z"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  lessons:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/>'
+};
+const svg=(k)=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+ICONS[k]+'</svg>';
+
+const APPS={
+  keynote:{n:'Keynote',g:['#4C9BFF','#1662E0'],l:'K',d:['Toutes']},
+  pages:{n:'Pages',g:['#FFB04A','#F27A0F'],l:'P',d:['Français','Langues']},
+  numbers:{n:'Numbers',g:['#5EDB78','#1FA84A'],l:'N',d:['Maths','Physique-chimie']},
+  freeform:{n:'Freeform',g:['#68D0FA','#2A9BD8'],l:'F',d:['Toutes','Arts plastiques']},
+  geogebra:{n:'GeoGebra',g:['#A3A8FF','#6469D8'],l:'G',d:['Maths']},
+  calc:{n:'Calculatrice',g:['#636366','#2C2C2E'],l:'±',d:['Maths','Physique-chimie']},
+  camera:{n:'Appareil photo',g:['#A1A1A6','#5A5A5F'],l:'◉',d:['SVT','Arts plastiques','EPS']},
+  garageband:{n:'GarageBand',g:['#FF9446','#E0561A'],l:'♪',d:['Éducation musicale']},
+  clips:{n:'Clips',g:['#FF6F96','#D63A6A'],l:'C',d:['Langues','Français']},
+  imovie:{n:'iMovie',g:['#A57CFF','#6A3FD8'],l:'★',d:['Histoire-géo','Langues']},
+  plans:{n:'Plans',g:['#86DB93','#3FA66B'],l:'↗',d:['Histoire-géo']},
+  livres:{n:'Livres',g:['#FFA751','#E86A17'],l:'L',d:['Français']},
+  safari:{n:'Safari',g:['#FFFFFF','#DCE9FF'],l:'◎',fg:'#1A73E8',d:[]},
+  bookcreator:{n:'Book Creator',g:['#4FD1D9','#1E8C99'],l:'B',d:[]},
+  kahoot:{n:'Kahoot!',g:['#9A5BE0','#5B1FA8'],l:'K!',d:[]},
+  scratchjr:{n:'ScratchJr',g:['#FFC25A','#F08A1F'],l:'S',d:[]},
+  jeu:{n:'Jeux',g:['#FFD84A','#FF8A00'],l:'★',d:[]},
+  videos:{n:'Vidéos',g:['#FF5A50','#C9201A'],l:'▶',d:[]}
+};
+const PICKABLE=['keynote','pages','numbers','freeform','geogebra','calc','camera','garageband','clips','imovie','plans','livres'];
+const HOME_APPS=['keynote','pages','numbers','freeform','geogebra','calc','garageband','clips','imovie','plans','livres','jeu','videos'];
+const DOCK=['safari','camera','keynote','pages'];
+const DISCIPLINES=['Toutes','Français','Maths','SVT','Histoire-géo','Langues','Physique-chimie','Arts plastiques','Éducation musicale','EPS'];
+const SITES=[
+  {n:'Lumni',u:'lumni.fr'},{n:'Vikidia',u:'vikidia.org'},{n:'GeoGebra en ligne',u:'geogebra.org/classic'},
+  {n:'Éduscol',u:'eduscol.education.fr'},{n:'Gallica (BnF)',u:'gallica.bnf.fr'},{n:'Géoportail',u:'geoportail.gouv.fr'}
+];
+const NAMES=['Adam','Inès','Lucas','Léa','Nathan','Chloé','Yanis','Jade','Hugo','Lina','Rayan','Manon'];
+const AVC=['#FF9F0A','#30B0C7','#5E5CE6','#FF375F','#34C759','#AF52DE','#0A84FF','#FF6482','#A2845E','#64D2FF','#BF5AF2','#32ADE6'];
+
+const MISSIONS=[
+  {id:'ec1',tool:'enclasse',t:'Ouvrir Keynote sur tous les iPad',h:'Sans sélection, les actions visent toute la classe. Touchez « Ouvrir ».'},
+  {id:'ec2',tool:'enclasse',t:'Verrouiller les écrans, puis les déverrouiller',h:'Observez les iPad des élèves sous l\'iPad enseignant.'},
+  {id:'ec3',tool:'enclasse',t:'Créer un groupe d\'au moins 3 élèves et lui envoyer un site web',h:'« Nouveau groupe » dans la barre latérale, choisissez le groupe, puis « Naviguer ».'},
+  {id:'ec4',tool:'enclasse',t:'Projeter l\'écran d\'un élève avec AirPlay',h:'Touchez un élève, puis AirPlay.'},
+  {id:'ec5',tool:'enclasse',t:'Repérer un élève distrait et le verrouiller dans une app',h:'Un groupe « Jeux » ou « Vidéos » apparaît dans la barre latérale. Ouvrez une app avec « Verrouiller dans l\'app ».'},
+  {id:'ec6',tool:'enclasse',t:'Couper le son de toute la classe',h:'Action « Couper le son », sans sélection.'},
+  {id:'jt1',tool:'jamf',t:'Appliquer la leçon « Évaluation » à toute la classe',h:'Ouvrez la classe 5e B, puis « Démarrer une leçon ».'},
+  {id:'jt2',tool:'jamf',t:'Créer une leçon pour votre discipline',h:'Sur l\'accueil, carte Leçons : « Nouvelle leçon ».'},
+  {id:'jt3',tool:'jamf',t:'Effacer le code oublié de Lina',h:'Dans la classe, touchez Lina, puis « Effacer le code ».'},
+  {id:'jt4',tool:'jamf',t:'Lever les restrictions en fin de cours',h:'Après une leçon, action « Lever les restrictions » dans la classe.'}
+];
+
+let done={};
+try{done=JSON.parse(localStorage.getItem('sophiae-labo-missions')||'{}')}catch(e){}
+function saveDone(){try{localStorage.setItem('sophiae-labo-missions',JSON.stringify(done))}catch(e){}}
+
+let S=null, timer=null, clockT=null, view='accueil';
+const DEFAULT_LESSONS=()=>[
+  {id:'eval',n:'Évaluation',apps:['pages','calc'],web:'bloqué',cam:false},
+  {id:'svt',n:'SVT – Observation',apps:['camera','keynote','freeform'],web:'liste',cam:true},
+  {id:'lecture',n:'Lecture autonome',apps:['livres','pages'],web:'bloqué',cam:false}
+];
+function newState(){
+  return {
+    students:NAMES.map((n,i)=>({id:i,n,c:AVC[i],dev:'iPad-5eB-'+String(i+1).padStart(2,'0'),bat:[92,78,64,100,55,87,71,96,43,81,68,90][i],app:'home',url:'',locked:false,single:false,muted:false,lesson:null,attention:null,forgot:view==='jamf'&&n==='Lina',wasDistracted:false})),
+    sel:new Set(),selMode:false,scope:'all',groups:[],showScreens:false,airplay:null,distract:true,
+    lessons:DEFAULT_LESSONS(),lockedAllOnce:false,sheet:null,jtab:'eleves',flash:null,jscreen:'home',installed:[],updated:false
+  };
+}
+
+function toast(msg,win){
+  const el=document.createElement('div');el.className='toast'+(win?' win':'');el.textContent=msg;
+  const box=document.getElementById('toasts');box.appendChild(el);while(box.children.length>3)box.firstChild.remove();setTimeout(()=>el.remove(),win?4200:2600);
+}
+function complete(id){
+  if(done[id])return;done[id]=true;saveDone();
+  const m=MISSIONS.find(x=>x.id===id);toast('Mission réussie : '+m.t,true);updateProgress();renderMissions();
+}
+function updateProgress(){
+  const n=MISSIONS.filter(m=>done[m.id]).length;
+  document.getElementById('progTxt').textContent=n+' / '+MISSIONS.length+' missions';
+  document.getElementById('progBar').style.width=(n/MISSIONS.length*100)+'%';
+}
+const esc=(t)=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Vues ---------- */
+function setView(v){
+  view=v;clearInterval(timer);
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===v?'page':'false'));
+  const app=document.getElementById('app');
+  if(v==='accueil'){app.innerHTML=portalHTML();bindHome();window.scrollTo(0,0);return}
+  if(v==='se-former'){app.innerHTML=homeHTML();bindHome();window.scrollTo(0,0);return}
+  if(v==='tutoriels'){app.innerHTML=tutoHTML();bindTuto();window.scrollTo(0,0);return}
+  S=newState();
+  app.innerHTML=simHTML(v);
+  bindSim();render();renderMissions();
+  timer=setInterval(distractTick,7000);
+  window.scrollTo(0,0);
+}
+
+function homeHTML(){
+  return `<section class="hero"><div class="wrap">
+    <span class="eyebrow">Labo de pratique · collège</span>
+    <h1>Piloter la classe iPad sans risque</h1>
+    <p>Deux simulateurs pour s'entraîner aux gestes de base d'En classe et de Jamf Teacher sur une classe fictive de 5<sup>e</sup>, avant de les utiliser avec vos élèves.</p>
+  </div></section>
+  <div class="wrap home-body">
+    <div class="cards">
+      <article class="card">
+        <span class="eyebrow">Outil 1</span>
+        <h2>En classe</h2>
+        <p>L'app d'Apple pour guider les élèves pendant le cours : vous agissez en direct sur leurs iPad.</p>
+        <ul><li>Ouvrir une app ou un site sur tous les iPad</li><li>Verrouiller les écrans, couper le son</li><li>Voir les écrans et projeter un travail avec AirPlay</li><li>Créer des groupes de travail</li></ul>
+        <button class="btn" data-go="enclasse">Ouvrir le simulateur</button>
+      </article>
+      <article class="card">
+        <span class="eyebrow">Outil 2</span>
+        <h2>Jamf Teacher</h2>
+        <p>L'outil de l'établissement pour fixer un cadre : vous décidez quelles apps et quels sites restent accessibles.</p>
+        <ul><li>Appliquer une leçon (apps autorisées, filtrage web)</li><li>Créer vos propres leçons par discipline</li><li>Réinitialiser le code d'un élève</li><li>Lever les restrictions en fin de cours</li></ul>
+        <button class="btn" data-go="jamf">Ouvrir le simulateur</button>
+      </article>
+      <article class="card">
+        <span class="eyebrow">Commencer par là</span>
+        <h2>Tutoriels</h2>
+        <p>Les gestes clés de chaque outil dans l'ordre d'une séance, un comparatif, et six scénarios prêts à l'emploi pour le collège et le lycée.</p>
+        <p><b>En classe</b> anime l'instant, <b>Jamf Teacher</b> pose le cadre.</p>
+        <button class="btn" data-go="tutoriels">Lire les tutoriels</button>
+      </article>
+    </div>
+    <div>
+      <h2 style="font-size:22px;margin-bottom:20px">Déroulé conseillé</h2>
+      <div class="steps">
+        <div class="step"><b class="n">1</b><div><b>Explorer librement</b><p class="muted">Cliquez sur les iPad pour les sélectionner, testez chaque bouton.</p></div></div>
+        <div class="step"><b class="n">2</b><div><b>Réaliser les missions</b><p class="muted">Dix missions guidées, validées automatiquement, 6 pour En classe et 4 pour Jamf Teacher.</p></div></div>
+        <div class="step"><b class="n">3</b><div><b>Gérer l'imprévu</b><p class="muted">Des élèves fictifs quittent parfois la tâche : repérez-les et réagissez.</p></div></div>
+      </div>
+    </div>
+    <div class="note"><strong>À retenir</strong>Les interfaces sont simplifiées pour l'entraînement : l'emplacement exact des boutons peut varier selon la version installée dans votre établissement. Votre progression est enregistrée dans ce navigateur.</div>
+  </div>`;
+}
+function go(v){if(location.hash.slice(1)===v)setView(v);else location.hash=v}
+function bindHome(){document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go))}
+
+const APPS_URL='https://claude.ai/artifact/RXoq2NRDJwb4xfjMSuzap6';
+const EXT='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function portalHTML(){
+  return `<section class="hero"><div class="wrap">
+    <span class="eyebrow">Sophiae · Ressources enseignants · collège et lycée</span>
+    <h1>L'iPad en classe</h1>
+    <p>Prendre en main la gestion de classe sur iPad, puis choisir les applications qui serviront vos objectifs disciplinaires.</p>
+  </div></section>
+  <div class="wrap portal">
+    <article class="door">
+      <span class="pic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+      <span class="eyebrow">Parcours 1</span>
+      <h2>Gérer la classe avec l'iPad</h2>
+      <p>Des tutoriels pas à pas pour <b>En classe</b> et <b>Jamf Teacher</b>, des scénarios pour le collège et le lycée, et deux simulateurs pour s'entraîner sans risque avec dix missions guidées.</p>
+      <div class="figs"><div><b>2</b><span>tutoriels</span></div><div><b>2</b><span>simulateurs</span></div><div><b>10</b><span>missions</span></div></div>
+      <button class="btn" data-go="se-former">Accéder aux tutoriels et simulateurs</button>
+    </article>
+    <article class="door alt">
+      <span class="pic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span>
+      <span class="eyebrow">Parcours 2</span>
+      <h2>Découvrir les applis en classe</h2>
+      <p>Une sélection d'applications classées par discipline et par usage, avec une courte présentation de chacune et un lien direct vers l'App Store.</p>
+      <div class="figs"><div><b>130+</b><span>applications</span></div><div><b>15</b><span>rubriques</span></div></div>
+      <a class="btn" href="${APPS_URL}" target="_blank" rel="noopener">Découvrir les applis ${EXT}</a>
+    </article>
+  </div>`;
+}
+
+/* ---------- Tutoriels ---------- */
+let tutoTab='enclasse';
+const T_EC=[
+  {w:'Avant le premier cours',t:'Vérifier les prérequis',p:'En classe est une app gratuite d\'Apple, installée sur l\'iPad (ou le Mac) de l\'enseignant.',l:['Bluetooth et Wi-Fi activés sur votre iPad et sur ceux des élèves.','Les élèves doivent se trouver à proximité, dans la même salle : En classe fonctionne en local.','Repérez avec votre référent numérique si vos classes sont créées par l\'établissement (Apple School Manager ou MDM) ou si vous devez les créer vous-même.']},
+  {w:'Avant le premier cours',t:'Retrouver ou créer sa classe',p:'Les classes gérées par l\'établissement apparaissent automatiquement, avec la liste des élèves.',l:['Sinon, créez une classe à proximité : nom, matière, salle, icône.','Donnez le code d\'invitation aux élèves : sur leur iPad, ils rejoignent la classe depuis Réglages, rubrique En classe.','Créez si besoin un agenda pour que la classe démarre aux heures du cours.']},
+  {w:'Début de séance',t:'Lancer le cours et faire l\'appel des iPad',p:'Ouvrez la classe : les iPad connectés apparaissent sous forme de vignettes. Un élève hors connexion est signalé, ce qui permet de régler le problème avant de commencer.'},
+  {w:'Pendant la séance',t:'Mettre tout le monde au travail',p:'Sans sélection, une action vise toute la classe. Touchez des élèves ou un groupe pour cibler.',l:['Ouvrir : lance la même app sur les iPad sélectionnés. L\'option de verrouillage dans l\'app empêche d\'en sortir, utile pour un exercice court ou un quiz.','Naviguer : ouvre une page web, un chapitre de livre ou un document.'],sim:'enclasse'},
+  {w:'Pendant la séance',t:'Capter l\'attention',p:'Verrouillez les écrans pendant une consigne orale, coupez le son si une vidéo démarre au mauvais moment. Déverrouillez dès que la consigne est donnée.',sim:'enclasse'},
+  {w:'Pendant la séance',t:'Suivre l\'activité et valoriser',p:'Les vignettes regroupent automatiquement les élèves par app ouverte, ce qui fait ressortir ceux qui sont ailleurs.',l:['Écrans : affiche les écrans des élèves. Ils voient un indicateur quand leur écran est observé : annoncez-le à la classe.','AirPlay : projette l\'écran d\'un élève sur l\'Apple TV ou le vidéoprojecteur compatible pour commenter son travail.','Partager des fichiers avec AirDrop et recevoir ceux des élèves.'],sim:'enclasse'},
+  {w:'Pendant la séance',t:'Différencier avec des groupes',p:'Créez des groupes manuels (îlots, niveaux, binômes) pour envoyer une ressource différente à chacun.',sim:'enclasse'},
+  {w:'Fin de séance',t:'Terminer le cours',p:'Terminez la classe pour rendre la main aux élèves. Le résumé de la classe récapitule les apps utilisées et les fichiers partagés pendant la séance.',l:['Pour un élève qui a oublié son mot de passe d\'identifiant Apple géré, En classe permet de le réinitialiser si l\'établissement l\'autorise.']}
+];
+const T_JT=[
+  {w:'Avant le premier cours',t:'Vérifier les prérequis',p:'Jamf Teacher s\'utilise dans les établissements dont les iPad sont gérés par Jamf (Jamf School ou Jamf Pro).',l:['L\'administrateur crée vos classes et définit ce que vous avez le droit de restreindre.','Vous travaillez depuis l\'app Jamf Teacher ou depuis son interface web, y compris hors de l\'établissement pour préparer vos cours.','Les commandes passent par le serveur de gestion : pas besoin d\'être à proximité des élèves, mais les iPad doivent être connectés à Internet.']},
+  {w:'Préparation',t:'Créer une leçon',p:'Une leçon (ou profil de cours) fixe le cadre de la séance.',l:['Applications autorisées : les autres sont masquées sur l\'iPad de l\'élève, notifications comprises.','Sites web autorisés ou accès Internet bloqué.','Fonctions de l\'appareil à désactiver, comme l\'appareil photo.','Une leçon réussie peut être partagée avec les collègues de l\'équipe disciplinaire.'],sim:'jamf'},
+  {w:'Début de séance',t:'Appliquer la leçon',p:'Appliquez la leçon à la classe entière ou à quelques élèves, tout de suite ou à l\'horaire prévu, pour la durée du cours. Pour une séance imprévue, une classe ponctuelle se lance avec les élèves présents.',sim:'jamf'},
+  {w:'Pendant la séance',t:'Capter l\'attention et communiquer',p:'L\'écran d\'attention verrouille les iPad avec un message de votre choix (« Regardez le tableau »). Vous pouvez aussi envoyer un message à un élève ou à toute la classe.'},
+  {w:'Pendant la séance',t:'Dépanner un élève',p:'Si l\'établissement l\'autorise, réinitialisez le code d\'un iPad verrouillé par un élève qui l\'a oublié, sans passer par le service informatique.',sim:'jamf'},
+  {w:'Fin de séance',t:'Lever les restrictions',p:'À la fin de la durée choisie, les restrictions sont levées automatiquement. Vous pouvez aussi les retirer vous-même plus tôt.',sim:'jamf'}
+];
+const SCEN=[
+  {lv:'Collège',tool:'En classe',t:'Démarrage de séance en 6e',s:['Écrans verrouillés à l\'entrée : on s\'installe, on écoute la consigne.','Ouvrir Keynote, verrouillé dans l\'app, sur toute la classe.','Déverrouiller et lancer le travail ; Écrans pour repérer qui bloque.']},
+  {lv:'Collège',tool:'En classe',t:'Travail en îlots en 4e',s:['Créer un groupe par îlot.','Envoyer à chaque groupe un site ou un document différent.','Projeter avec AirPlay la production d\'un îlot pour la mise en commun.']},
+  {lv:'Collège',tool:'Jamf Teacher',t:'Évaluation en 3e',s:['Leçon « Évaluation » : Pages et Calculatrice seules, Internet bloqué.','Appliquer pour la durée de l\'épreuve.','Restrictions levées automatiquement à la sonnerie.']},
+  {lv:'Lycée',tool:'Jamf Teacher',t:'Entraînement type bac',s:['Leçon limitée à l\'app de rédaction et au sujet en PDF.','Appliquer sur la plage horaire de l\'épreuve blanche.','Partager la leçon avec l\'équipe disciplinaire.']},
+  {lv:'Lycée',tool:'Les deux',t:'Projet en autonomie en 1re',s:['Leçon large : apps de création et sites de recherche autorisés.','En classe pour suivre l\'avancement et projeter les étapes réussies.','Fin de séance : récupérer les fichiers par AirDrop.']},
+  {lv:'Lycée',tool:'En classe',t:'Oral en langue vivante',s:['Ouvrir Clips ou l\'enregistreur sur tous les iPad.','Couper le son pendant la préparation silencieuse.','Projeter deux productions pour une co-évaluation.']}
+];
+function tlHTML(steps){
+  const phases=[];
+  steps.forEach((s,i)=>{let p=phases[phases.length-1];if(!p||p.w!==s.w){p={w:s.w,items:[]};phases.push(p)}p.items.push([s,i+1])});
+  const bold=x=>x.replace(/^([^:]{2,40}) : /,'<b>$1</b> : ');
+  return '<div class="phases">'+phases.map(p=>`<section class="phase"><div class="phase-h"><h2>${p.w}</h2></div>${p.items.map(([s,n])=>`<article class="stepcard"><span class="n">${n}</span><div class="body"><h3>${s.t}</h3><p>${s.p}</p>${s.l?'<ul>'+s.l.map(x=>'<li>'+bold(x)+'</li>').join('')+'</ul>':''}${s.sim?'<button class="simlink" data-go="'+s.sim+'"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>S\'entraîner dans le simulateur</button>':''}</div></article>`).join('')}</section>`).join('')+'</div>';
+}
+function tutoHTML(){
+  let body;
+  if(tutoTab==='enclasse'||tutoTab==='jamf'){
+    const ec=tutoTab==='enclasse';
+    body=`<div class="tutogrid"><div>${tlHTML(ec?T_EC:T_JT)}</div>
+      <aside class="side">
+        <div class="note"><strong>${ec?'En une phrase':'En une phrase'}</strong>${ec?'En classe sert à <b>animer l\'instant</b> : vous agissez en direct sur les iPad présents dans la salle.':'Jamf Teacher sert à <b>poser le cadre</b> : vous décidez quelles apps et quels sites restent accessibles, et pour combien de temps.'}</div>
+        <div class="card" style="padding:20px"><h2 style="font-size:14px">S'entraîner</h2><p style="margin:0;font-size:14px">Classe fictive de 12 élèves, missions validées automatiquement.</p><button class="btn" data-go="${tutoTab}">Ouvrir le simulateur</button></div>
+        <p class="hint" style="margin:0">Les libellés exacts peuvent varier selon la version installée et les réglages de l'établissement.</p>
+      </aside></div>`;
+  }else{
+    body=`<div><h2 style="font-size:22px;margin-bottom:16px">Lequel utiliser ?</h2><div class="cmpwrap"><table class="cmp">
+      <thead><tr><th></th><th>En classe (Apple)</th><th>Jamf Teacher</th></tr></thead><tbody>
+      <tr><td>Rôle</td><td>Animer la séance en direct</td><td>Fixer le cadre de la séance</td></tr>
+      <tr><td>Connexion</td><td>À proximité, Bluetooth et Wi-Fi</td><td>Via Internet et le serveur Jamf, à distance possible</td></tr>
+      <tr><td>Points forts</td><td>Écrans, AirPlay, ouvrir une app pour tous, AirDrop</td><td>Apps et sites autorisés, appareil photo, durée, planification</td></tr>
+      <tr><td>Préparation</td><td>Aucune : tout se décide pendant le cours</td><td>Leçons préparées à l'avance, partageables</td></tr>
+      <tr><td>Prérequis</td><td>App gratuite, classe créée ou synchronisée</td><td>iPad gérés par Jamf, droits donnés par l'administrateur</td></tr>
+      </tbody></table></div></div>
+      <div><h2 style="font-size:22px;margin-bottom:6px">Scénarios collège et lycée</h2><p class="muted" style="margin:0 0 18px">Au collège, le cadre est plus serré et les iPad sont souvent partagés. Au lycée, on laisse plus d'autonomie et on cadre surtout les évaluations.</p>
+      <div class="scen">${SCEN.map(s=>`<article class="card"><div class="lvl"><span>${s.lv}</span><span class="tool">${s.tool}</span></div><h3>${s.t}</h3><ol>${s.s.map(x=>'<li>'+x+'</li>').join('')}</ol></article>`).join('')}</div></div>
+      <div class="note"><strong>Pour aller plus loin</strong>Choisissez les applications à ouvrir pendant ces scénarios dans le <a href="${APPS_URL}" target="_blank" rel="noopener" style="color:var(--violet-vif);font-weight:600">catalogue des applis en classe</a>.</div>`;
+  }
+  return `<section class="hero"><div class="wrap" style="padding-block:40px 32px">
+    <span class="eyebrow">Tutoriels · collège et lycée</span><h1>Gérer la classe iPad pas à pas</h1>
+    <p>Les gestes clés, dans l'ordre d'une séance, avec un lien vers le simulateur pour chaque étape pratique.</p></div></section>
+    <div class="wrap tuto">
+      <div class="subtabs" role="tablist">
+        <button class="chip${tutoTab==='enclasse'?' on':''}" data-tt="enclasse" role="tab" aria-selected="${tutoTab==='enclasse'}">Tutoriel En classe</button>
+        <button class="chip${tutoTab==='jamf'?' on':''}" data-tt="jamf" role="tab" aria-selected="${tutoTab==='jamf'}">Tutoriel Jamf Teacher</button>
+        <button class="chip${tutoTab==='usages'?' on':''}" data-tt="usages" role="tab" aria-selected="${tutoTab==='usages'}">Comparer et scénarios</button>
+      </div>
+      ${body}
+    </div>`;
+}
+function bindTuto(){
+  bindHome();
+  document.querySelectorAll('[data-tt]').forEach(b=>b.onclick=()=>{tutoTab=b.dataset.tt;document.getElementById('app').innerHTML=tutoHTML();bindTuto()});
+}
+
+/* ---------- Écrans des iPad élèves ---------- */
+const hhmm=()=>new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const today=()=>new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+function icon(k){const a=APPS[k];return '<span class="ai" style="background:linear-gradient(160deg,'+a.g[0]+','+a.g[1]+');'+(a.fg?'color:'+a.fg+';box-shadow:inset 0 0 0 .06em #D1D1D6':'')+'"><i>'+a.l+'</i></span>'}
+const initials=n=>n.slice(0,2).toUpperCase();
+function allowedApps(s){
+  if(!s.lesson)return null;
+  const L=S.lessons.find(l=>l.id===s.lesson);if(!L)return null;
+  const a=[...L.apps];if(L.web!=='bloqué')a.push('safari');return a;
+}
+function sbar(dark){
+  const obs=view==='enclasse'&&S.showScreens;
+  return '<div class="s-sb'+(dark?' dk':'')+'"><span>'+hhmm()+'</span><span class="r">'+(obs?'<span class="obs">◉</span>':'')+'<span class="wf"></span><span class="bt"></span></span></div>';
+}
+function lines(n,seed){let h='';for(let i=0;i<n;i++)h+='<div class="ln" style="width:'+(55+((i*37+seed*13)%45))+'%"></div>';return h}
+function mock(k){
+  const B=(st)=>'<div class="blk" style="'+st+'"></div>';
+  switch(k){
+    case 'keynote':return B('inset:0;border-radius:0;background:#E9E9EE')+B('left:.6em;top:.7em;width:2.4em;height:1.8em;background:#fff;box-shadow:0 0 0 .1em #1662E0')+B('left:.6em;top:3em;width:2.4em;height:1.8em;background:#fff')+B('left:.6em;top:5.3em;width:2.4em;height:1.8em;background:#fff')
+      +'<div class="blk" style="left:3.6em;top:1.2em;right:.7em;height:9em;background:#fff;box-shadow:0 .1em .4em rgba(0,0,0,.15)">'+B('left:1em;top:1.2em;width:65%;height:1em;background:#1662E0')+B('left:1em;top:3em;width:42%;height:4.4em;background:#C9DBFF')+'<div style="position:absolute;left:50%;top:3em;right:1em">'+lines(4,1)+'</div></div>';
+    case 'pages':return '<div style="padding:1.2em 1.6em">'+'<div class="ln" style="width:58%;height:.9em;background:#F27A0F;margin-bottom:.9em"></div>'+lines(6,2)+'<div class="ln" style="width:100%;height:4em;background:#FFE6CC;margin:.8em 0"></div>'+lines(5,3)+'</div>';
+    case 'numbers':{let c='';for(let i=0;i<28;i++)c+='<div style="background:'+(i<4?'#1FA84A':'#fff')+';height:1.1em"></div>';
+      return '<div style="padding:.9em"><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.1em;background:#D1D1D6;border:.1em solid #D1D1D6">'+c+'</div><div style="display:flex;align-items:flex-end;gap:.6em;height:6em;margin-top:1em;padding:0 .5em;border-bottom:.1em solid #C7C7CC">'+[40,70,55,90,65].map(h=>'<div style="flex:1;height:'+h+'%;background:#34C759;border-radius:.2em .2em 0 0"></div>').join('')+'</div></div>';}
+    case 'freeform':return B('inset:0;border-radius:0;background:#FAFAFA radial-gradient(#D1D1D6 .08em,transparent .1em) 0 0/1.2em 1.2em')+B('left:1.2em;top:1.4em;width:5em;height:5em;background:#FFE680;transform:rotate(-4deg)')+B('left:7.6em;top:2.2em;width:5em;height:5em;background:#FFB3C7;transform:rotate(3deg)')+B('left:3.6em;top:8.6em;width:9em;height:4em;background:#B3E0FF')+B('left:12.2em;top:9em;width:3.6em;height:3.6em;border-radius:50%;border:.15em solid #2A9BD8;background:none');
+    case 'geogebra':return B('inset:0;border-radius:0;background:#fff linear-gradient(#EEE .06em,transparent .06em) 0 0/1.4em 1.4em,linear-gradient(90deg,#EEE .06em,transparent .06em) 0 0/1.4em 1.4em')+'<svg viewBox="0 0 100 110" style="position:absolute;inset:0;width:100%;height:100%"><line x1="0" y1="60" x2="100" y2="60" stroke="#666" stroke-width=".6"/><line x1="40" y1="0" x2="40" y2="110" stroke="#666" stroke-width=".6"/><circle cx="58" cy="44" r="20" fill="rgba(100,105,216,.15)" stroke="#6469D8" stroke-width="1.2"/><line x1="10" y1="95" x2="92" y2="12" stroke="#C9201A" stroke-width="1.2"/><circle cx="58" cy="44" r="1.8" fill="#1662E0"/></svg>';
+    case 'calc':{const k=['C','±','%','÷','7','8','9','×','4','5','6','−','1','2','3','+'];
+      return B('inset:0;border-radius:0;background:#000')+'<div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:1em"><div style="color:#fff;font-size:3em;text-align:right;font-weight:300">128</div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin-top:.6em">'+k.map((x,i)=>'<span style="aspect-ratio:1;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.1em;background:'+(i%4===3?'#FF9F0A':i<3?'#A5A5A5':'#333')+'">'+x+'</span>').join('')+'</div></div>';}
+    case 'camera':return B('inset:0;border-radius:0;background:#111')+B('left:.8em;right:.8em;top:1em;bottom:4.6em;background:linear-gradient(160deg,#7CB36B,#3E6E3A 60%,#24401F)')+B('left:4em;top:4em;width:5em;height:6em;border-radius:50% 50% 45% 45%;background:#9BD08A;opacity:.85')+B('left:50%;bottom:1em;width:2.8em;height:2.8em;margin-left:-1.4em;border-radius:50%;background:#fff;box-shadow:0 0 0 .25em #111,0 0 0 .4em #fff');
+    case 'garageband':{let w='';for(let i=0;i<10;i++)w+='<div style="flex:1;background:#fff;border-right:.06em solid #999;height:100%"></div>';let bk='';[0,1,3,4,5,7,8].forEach(i=>bk+='<div style="position:absolute;left:'+((i+.65)*10)+'%;width:6%;height:58%;background:#111;border-radius:0 0 .2em .2em"></div>');
+      return B('inset:0;border-radius:0;background:#3A2A20')+B('left:.8em;right:.8em;top:1em;height:5em;background:#5C4535')+'<div style="position:absolute;left:0;right:0;bottom:0;height:45%;display:flex">'+w+bk+'</div>';}
+    case 'clips':case 'imovie':return B('inset:0;border-radius:0;background:#1C1C1E')+B('left:.8em;right:.8em;top:1em;height:9em;background:linear-gradient(135deg,#6A3FD8,#FF6F96)')+'<div style="position:absolute;left:.8em;right:.8em;bottom:2em;display:flex;gap:.2em">'+[1,2,3,4,5].map(i=>'<div style="flex:1;height:2.4em;border-radius:.2em;background:hsl('+(260+i*18)+',55%,'+(40+i*5)+'%)"></div>').join('')+'</div>'+B('left:50%;bottom:5em;width:.15em;height:4em;background:#FFD60A');
+    case 'plans':return B('inset:0;border-radius:0;background:#E8F0DE')+'<svg viewBox="0 0 100 110" style="position:absolute;inset:0;width:100%;height:100%"><path d="M-5 30 C30 40,40 10,105 25" stroke="#A8D4F5" stroke-width="7" fill="none"/><path d="M0 75 L100 60 M30 0 L45 110 M70 0 L62 110" stroke="#fff" stroke-width="3.5"/><path d="M0 75 L100 60" stroke="#FFD27A" stroke-width="2"/><rect x="10" y="85" width="16" height="12" fill="#C9E3B8"/><circle cx="56" cy="64" r="3.5" fill="#FF3B30" stroke="#fff" stroke-width="1.2"/></svg>';
+    case 'livres':return B('inset:0;border-radius:0;background:#FBF6EC')+'<div style="position:absolute;inset:1.4em 1.8em"><div class="ln" style="width:40%;margin:0 auto 1em;background:#B49A7A"></div>'+lines(14,5).replace(/#D9D9DE/g,'#CFC6B6')+'</div>';
+    case 'safari':return B('left:0;right:0;top:0;height:5em;border-radius:0;background:linear-gradient(120deg,#4A6A8A,#7A9CC0)')+'<div style="position:absolute;left:1.2em;right:1.2em;top:6em"><div class="ln" style="width:70%;height:.9em;background:#3C3C43"></div>'+lines(5,7)+'<div class="ln" style="width:100%;height:4em;background:#E5ECF5;margin:.8em 0"></div>'+lines(3,9)+'</div>';
+    case 'jeu':return B('inset:0;border-radius:0;background:linear-gradient(180deg,#5AC8FA,#B3ECFF)')+B('left:0;right:0;bottom:0;height:4em;border-radius:0;background:#4CD964')+B('left:2em;bottom:4em;width:2.4em;height:2.4em;border-radius:50%;background:#FF3B30')+B('left:8em;top:6em;width:1.6em;height:1.6em;border-radius:50%;background:#FFCC00')+B('left:12em;top:9em;width:1.6em;height:1.6em;border-radius:50%;background:#FFCC00')+B('left:10.5em;bottom:4em;width:3em;height:5em;background:#8E5A2B')+'<div style="position:absolute;top:.6em;right:.8em;font-weight:800;color:#fff;font-size:1em;text-shadow:0 .1em .2em rgba(0,0,0,.3)">★ 1 250</div>';
+    case 'videos':return B('inset:0;border-radius:0;background:#0E0E10')+'<div class="blk" style="left:0;right:0;top:0;height:7.5em;border-radius:0;background:linear-gradient(135deg,#333,#555)"><div style="position:absolute;left:50%;top:50%;margin:-1.2em 0 0 -1em;width:0;height:0;border-left:2em solid rgba(255,255,255,.85);border-top:1.2em solid transparent;border-bottom:1.2em solid transparent"></div></div>'+B('left:0;top:7.5em;width:45%;height:.25em;border-radius:0;background:#FF453A')+[0,1,2].map(i=>B('left:1em;top:'+(9.5+i*3.6)+'em;width:5em;height:2.8em;background:#2C2C2E')+B('left:6.8em;top:'+(9.8+i*3.6)+'em;width:8em;height:.5em;background:#48484A')+B('left:6.8em;top:'+(10.8+i*3.6)+'em;width:5em;height:.4em;background:#3A3A3C')).join('');
+  }
+  return lines(10,1);
+}
+function screenInner(s){
+  if(view==='jamf'&&s.forgot)return '<div class="pass">'+'<span>Saisissez le code</span><span class="dots">'+'<i></i>'.repeat(6)+'</span><span class="keys">'+[1,2,3,4,5,6,7,8,9,'',0,''].map(k=>k===''?'<b></b>':'<i>'+k+'</i>').join('')+'</span><span class="warn">Code oublié ? Demandez à l\'enseignant.</span></div>';
+  if(s.attention)return '<div class="att"><div style="position:absolute;top:0;left:0;right:0">'+sbar()+'</div><small>Message de votre enseignant</small><b>'+esc(s.attention)+'</b></div>';
+  if(s.locked)return '<div class="lock">'+sbar()+'<div class="tm">'+hhmm()+'</div><div class="dt">'+today()+'</div><div class="msg">'+svg('lock')+'<span>Cet iPad est verrouillé par votre enseignant</span></div></div>';
+  if(s.app==='home'){
+    const al=allowedApps(s);
+    const list=HOME_APPS.concat(S.installed||[]).filter(a=>!al||al.includes(a)), dock=DOCK.filter(a=>!al||al.includes(a));
+    return '<div class="wall">'+sbar()+'<div class="hgrid">'+list.map(a=>'<div class="hi">'+icon(a)+'<em>'+APPS[a].n+'</em></div>').join('')+'</div>'+(dock.length?'<div class="dock">'+dock.map(icon).join('')+'</div>':'')+'</div>';
+  }
+  const k=s.app;
+  return '<div class="app">'+sbar(true)+'<div class="abar">'+(k==='safari'?'<div class="url">'+esc(s.url)+'</div>':'<span style="font-size:.5em">'+icon(k)+'</span><b>'+APPS[k].n+'</b>')+'</div><div class="abody">'+mock(k)+'</div></div>';
+}
+const scr=(s)=>'<div class="sscr"><div class="scr">'+screenInner(s)+'</div></div>';
+
+/* ---------- Mise en page du simulateur ---------- */
+function simHTML(v){
+  const title=v==='enclasse'?'En classe':'Jamf Teacher';
+  return `<div class="wrap sv">
+    <div class="sv-head"><div><span class="eyebrow">Simulateur · classe fictive de 5<sup>e</sup> B</span><h1>${title}</h1></div>
+      <p class="muted" style="margin:0;max-width:540px">Utilisez l'iPad de l'enseignant comme une vraie tablette. Les iPad des élèves, plus bas, réagissent en direct à chacune de vos actions.</p></div>
+    <div class="sv-main">
+      <div class="dev t"><div class="dev-scr" id="tui"></div></div>
+      <aside class="sv-side"><div class="panel" id="missions"></div>
+        <div class="panel"><h2>Réglages</h2>
+          <label class="tg"><input type="checkbox" id="dis" checked> ${v==='enclasse'?'Simuler des élèves distraits':'Simuler des élèves tentés par d\'autres apps'}</label>
+          <button class="btn sec" id="resetClass" style="font-size:13px">Réinitialiser la classe</button></div>
+      </aside>
+    </div>
+    <div class="tv-wrap" id="tv" hidden></div>
+    <section class="sd-wrap"><div><h2>Les iPad des élèves</h2><p class="hint" style="margin:4px 0 0">${v==='enclasse'?'Quand vous affichez les écrans, un indicateur bleu apparaît dans la barre d\'état des élèves.':'Avec une leçon ou des restrictions actives, seules les apps autorisées restent sur l\'écran d\'accueil.'}</p></div>
+      <div class="sd-grid" id="sdevs"></div></section>
+  </div>`;
+}
+function bindSim(){
+  const tui=document.getElementById('tui');
+  tui.addEventListener('click',onTap);
+  tui.addEventListener('input',e=>{const f=e.target.dataset.f;if(f&&S.sheet)S.sheet[f]=e.target.value;if(f==='q'){const q=e.target.value.toLowerCase();tui.querySelectorAll('[data-appname]').forEach(b=>b.hidden=!b.dataset.appname.includes(q))}});
+  tui.addEventListener('change',e=>{
+    if(!S.sheet)return;const t=e.target;
+    if(t.dataset.app){const set=new Set(S.sheet.apps||[]);t.checked?set.add(t.dataset.app):set.delete(t.dataset.app);S.sheet.apps=[...set]}
+    if(t.dataset.fc)S.sheet[t.dataset.fc]=t.checked;
+  });
+  tui.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset.f==='url'){S.sheet.url=e.target.value;onTap({target:{closest:()=>({dataset:{a:'sh-nav'}})}})}});
+  document.getElementById('dis').onchange=e=>{S.distract=e.target.checked};
+  document.getElementById('resetClass').onclick=()=>{const d=S.distract;S=newState();S.distract=d;render();toast('Classe réinitialisée')};
+  document.getElementById('tv').addEventListener('click',e=>{if(e.target.closest('[data-stopair]')){S.airplay=null;render()}});
+  if(!window.__escBound){window.__escBound=true;document.addEventListener('keydown',escClose)}
+}
+function escClose(e){if(e.key==='Escape'&&S&&S.sheet){S.sheet=null;render()}}
+function renderMissions(){
+  const el=document.getElementById('missions');if(!el)return;
+  const list=MISSIONS.filter(m=>m.tool===view);
+  const n=list.filter(m=>done[m.id]).length;
+  el.innerHTML='<h2>Missions</h2><p class="hint" style="margin:0">'+n+' sur '+list.length+' réussies</p><ol>'+list.map(m=>'<li class="'+(done[m.id]?'done':'')+'"><span class="ck">'+(done[m.id]?'✓':'')+'</span><span class="t"><b>'+m.t+'</b><span class="hint">'+m.h+'</span></span></li>').join('')+'</ol><button class="btn sec" id="resetM" style="font-size:13px">Recommencer les missions</button>';
+  document.getElementById('resetM').onclick=()=>{list.forEach(m=>delete done[m.id]);saveDone();updateProgress();renderMissions();toast('Missions remises à zéro')};
+}
+function render(){
+  const tui=document.getElementById('tui');if(!tui)return;
+  const SCR='.t-body,.jp-grid,.jh:not(.jblur .jh)';const st=tui.querySelector(SCR);const top=st?st.scrollTop:0;
+  tui.innerHTML=(view==='enclasse'?uiEnClasse():uiJamf())+(S.sheet?sheetHTML():'');
+  const nb=tui.querySelector(SCR);if(nb)nb.scrollTop=top;
+  const f=tui.querySelector('.sheet input[type=text]');if(f&&S.sheet&&!S.sheet.focused){S.sheet.focused=true;f.focus()}
+  document.getElementById('sdevs').innerHTML=S.students.map(s=>'<div class="sd'+(S.flash===s.id?' flash':'')+'"><div class="dev m"><div class="dev-scr">'+scr(s)+'</div></div><div class="nm">'+s.n+'</div>'+(s.blockedMsg?'<span class="pill warn">'+s.blockedMsg+'</span>':'')+'</div>').join('');
+  const tv=document.getElementById('tv');
+  if(S.airplay===null){tv.hidden=true;tv.innerHTML=''}else{
+    const s=S.students[S.airplay];tv.hidden=false;
+    tv.innerHTML='<div class="tv"><div class="tv-in">'+scr(s)+'</div></div><div class="tv-cap"><span>Vidéoprojecteur – Salle 104 · écran de <b>'+s.n+'</b></span><button class="btn sec" data-stopair style="font-size:13px;padding:6px 12px">Arrêter la recopie</button></div>';
+  }
+}
+
+/* ---------- En classe ---------- */
+function ecMembers(){
+  if(S.scope.startsWith('g:')){const g=S.groups[+S.scope.slice(2)];return g?S.students.filter(s=>g.m.includes(s.id)):S.students}
+  if(S.scope.startsWith('app:')){const k=S.scope.slice(4);return S.students.filter(s=>s.app===k&&!s.locked)}
+  return S.students;
+}
+function targets(){
+  if(view==='jamf')return S.sel.size?S.students.filter(s=>S.sel.has(s.id)):S.students;
+  const m=ecMembers();return S.sel.size?m.filter(s=>S.sel.has(s.id)):m;
+}
+const wholeClass=(T)=>T.length===S.students.length;
+function scopeTitle(){
+  if(S.scope.startsWith('g:'))return S.groups[+S.scope.slice(2)].n;
+  if(S.scope.startsWith('app:'))return APPS[S.scope.slice(4)].n;
+  return '5e B – Sciences';
+}
+function uiEnClasse(){
+  if(S.scope.startsWith('app:')&&!ecMembers().length)S.scope='all';
+  const apps={};S.students.forEach(s=>{if(s.app!=='home'&&!s.locked)apps[s.app]=(apps[s.app]||0)+1});
+  const M=ecMembers(), T=targets();
+  const allLocked=T.length&&T.every(s=>s.locked), allMuted=T.length&&T.every(s=>s.muted);
+  const row=(v,label,cnt,ic)=>'<button class="t-row'+(S.scope===v?' on':'')+'" data-a="scope" data-v="'+v+'">'+ic+'<span>'+esc(label)+'</span><span class="cnt">'+cnt+'</span></button>';
+  const side='<div class="t-side"><h1>En classe</h1><div class="t-sec">Mes classes</div><div class="t-list">'
+    +'<button class="t-row on" data-a="scope" data-v="all"><span class="ci" style="background:#5E5CE6">5e</span><span>5e B – Sciences</span></button>'
+    +'<button class="t-row" data-a="otherclass"><span class="ci" style="background:#30B0C7">4e</span><span>4e A – Sciences</span></button>'
+    +'<button class="t-row" data-a="otherclass"><span class="ci" style="background:#FF9F0A">3e</span><span>3e C – Sciences</span></button></div>'
+    +'<div class="t-sec">5e B – Groupes</div><div class="t-list">'
+    +row('all','Tous les élèves',S.students.length,svg('group'))
+    +Object.keys(apps).map(k=>row('app:'+k,APPS[k].n,apps[k],'<span style="font-size:10px">'+icon(k)+'</span>')).join('')
+    +S.groups.map((g,i)=>row('g:'+i,g.n,g.m.length,svg('group'))).join('')
+    +'<button class="t-row add" data-a="newgroup">'+svg('plus')+'<span>Nouveau groupe</span></button></div></div>';
+  const sub=S.sel.size?S.sel.size+' sélectionné'+(S.sel.size>1?'s':''):M.length+' élève'+(M.length>1?'s':'');
+  const act=(a,ic,label,on,dis)=>'<button class="t-act'+(on?' on':'')+'" data-a="'+a+'"'+(dis?' disabled':'')+'><span>'+svg(ic)+'</span>'+label+'</button>';
+  const cards=M.map(s=>{
+    const sel=S.sel.has(s.id);
+    let st=s.locked?'Verrouillé':s.app==='home'?'Écran d\'accueil':(s.app==='safari'?s.url:APPS[s.app].n);
+    if(s.single&&!s.locked)st+=' · app unique';if(s.muted)st+=' · muet';
+    const warn=!s.locked&&(s.app==='jeu'||s.app==='videos');
+    const vis=S.showScreens?'<div class="thumb">'+scr(s)+'</div>':'<div class="av" style="background:'+s.c+'">'+initials(s.n)+(s.locked?'<span class="lockb">'+svg('lock')+'</span>':s.app!=='home'?icon(s.app):'')+'</div>';
+    return '<button class="sc'+(sel?' sel':'')+'" data-a="card" data-v="'+s.id+'">'+(S.selMode?'<span class="chk">'+(sel?svg('check'):'')+'</span>':'')+vis+'<span class="nm">'+s.n+'</span><span class="st'+(warn?' warn':'')+'">'+esc(st)+'</span></button>';
+  }).join('');
+  const main='<div class="t-main"><div class="t-nav"><div><div class="ttl">'+esc(scopeTitle())+'</div><div class="sub">'+sub+'</div></div><div class="btns"><button class="tb'+(S.selMode?' bold':'')+'" data-a="selmode">'+(S.selMode?'OK':'Sélectionner')+'</button><button class="tb red" data-a="end">Terminer le cours</button></div></div>'
+    +'<div class="t-acts">'+act('open','open','Ouvrir')+act('nav','web','Naviguer')+act('lock',allLocked?'unlock':'lock',allLocked?'Déverrouiller':'Verrouiller',allLocked)+act('mute','mute',allMuted?'Rétablir':'Couper le son',allMuted)+act('screens','screens','Écrans',S.showScreens)+act('air','airplay','AirPlay',S.airplay!==null,T.length!==1)+'</div>'
+    +'<div class="t-body">'+(M.length?'<div class="t-grid">'+cards+'</div>':'<p class="sh-note">Aucun élève dans ce groupe.</p>')+'</div></div>';
+  return '<div class="t-sb"><span>'+hhmm()+'  '+today()+'</span><span class="r"><span>Wi-Fi</span><span>100 %</span></span></div><div class="t-split">'+side+main+'</div>';
+}
+
+/* ---------- Jamf Teacher ---------- */
+function jHomeHTML(){
+  const lessons=S.lessons.filter(l=>l.id!=='quick');
+  const classRow=(l,c,n,act)=>'<div class="jl-row"><span class="jav" style="background:'+c+'">'+l+'</span><span class="jl-n">'+n+'</span><button class="jpill" data-a="'+act+'">OUVRIR</button></div>';
+  return '<div class="jh"><div class="jh-top"><button class="jh-dev" data-a="jdev">iPad de M. Martin <span>⌄</span></button><button class="jh-gear" data-a="jdev" aria-label="Réglages"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></button></div>'
+    +'<div class="jh-grid">'
+    +'<button class="jt orange" data-a="jres"><span class="jt-ic"><svg viewBox="0 0 48 48"><path d="M24 6l18 9-18 9-18-9z" fill="#fff"/><path d="M6 23l18 9 18-9M6 31l18 9 18-9" stroke="#fff" stroke-width="3.5" fill="none" stroke-linejoin="round"/></svg></span><span class="jt-t"><b>Mes ressources</b><small>Télécharger des apps, des documents…</small></span></button>'
+    +'<button class="jt blue" data-a="jupd"><span class="jt-t top"><b>Mises à jour</b><small>'+(S.updated?'Tout est à jour':'3 mises à jour disponibles')+'</small></span><span class="jt-ic"><svg viewBox="0 0 48 48"><rect x="8" y="12" width="32" height="28" rx="6" fill="#fff"/><path d="M24 4v24M16 20l8 8 8-8" stroke="#5AC8FA" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>'
+    +'<div class="jcard"><h3>Classes</h3>'+classRow('5','#5E8FB0','5e B – Sciences','jopen')+classRow('4','#9AAE6E','4e A – Sciences','otherclass')+classRow('3','#D9A24A','3e C – Sciences','otherclass')+'</div>'
+    +'<div class="jcard"><h3>Leçons</h3>'+lessons.map((L,i)=>'<div class="jl-row"><span class="jav" style="background:'+['#D0663E','#9AAE6E','#5E8FB0','#C25B4A','#7E6BC4'][i%5]+'">'+esc(L.n[0])+'</span><span class="jl-n">'+esc(L.n)+'</span><button class="jpill" data-a="jedit" data-v="'+L.id+'">MODIFIER</button></div>').join('')+'<div class="jl-row"><button class="jl-add" data-a="newlesson">+ Nouvelle leçon</button></div></div>'
+    +'<button class="jt green" data-a="jmsghome"><span class="jt-t top"><b>Messages</b><small>Écrire aux élèves d\'une classe</small></span></button>'
+    +'</div></div>';
+}
+function uiJamf(){
+  const sb='<div class="t-sb" style="background:#fff"><span>'+hhmm()+'  '+today()+'</span><span class="r"><span>Wi-Fi</span><span>100 %</span></span></div>';
+  if(S.jscreen!=='class')return sb+'<div class="jwrap">'+jHomeHTML()+'</div>';
+  const T=targets();
+  const act=(a,ic,l)=>'<button class="jact" data-a="'+a+'"><span>'+ic+'</span>'+l+'</button>';
+  const I={
+    start:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M9 20h6M12 16v4M10 8.5l4 2-4 2z"/></svg>',
+    restr:svg('lock'),clear:svg('unlock'),
+    inst:'<svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M8.5 13h7"/></svg>',
+    msg:svg('msg')
+  };
+  const cards=S.students.map(s=>{
+    const sel=S.sel.has(s.id);const L=s.lesson&&S.lessons.find(l=>l.id===s.lesson);
+    const sub=s.forgot?'Code oublié':s.attention?'Écran d\'attention':s.single?'Verrouillé : '+APPS[s.app].n:L?L.n:s.app==='home'?'Disponible':(s.app==='safari'?s.url:APPS[s.app].n);
+    return '<button class="jstu'+(sel?' sel':'')+'" data-a="jstu" data-v="'+s.id+'"><span class="jav big" style="background:'+s.c+'">'+s.n[0]+(s.forgot?'<i class="dot warn"></i>':s.lesson||s.single?'<i class="dot ok"></i>':'')+(S.selMode?'<i class="sck">'+(sel?svg('check'):'')+'</i>':'')+'</span><span class="nm">'+s.n+'</span><span class="sub'+(s.forgot?' warn':'')+'">'+esc(sub)+'</span></button>';
+  }).join('');
+  return sb+'<div class="jwrap"><div class="jblur" aria-hidden="true">'+jHomeHTML()+'</div><div class="jpanel">'
+    +'<div class="jp-h"><button class="tb" data-a="jleave" style="justify-self:start">Quitter la classe</button><b>5e B – Sciences</b><button class="tb'+(S.selMode?' bold':'')+'" data-a="selmode" style="justify-self:end">'+(S.selMode?'OK':'Sélectionner')+'</button></div>'
+    +'<div class="jp-acts">'+act('apply',I.start,'Démarrer une leçon')+act('restr',I.restr,'Restrictions')+act('lift',I.clear,'Lever les restrictions')+act('install',I.inst,'Installer des apps')+act('attn',I.msg,'Messages')+'</div>'
+    +'<div class="jp-tabs"><button class="on"><span>T</span>Tous</button><span class="jp-for">Actions pour : <b>'+(S.sel.size?S.sel.size+' élève'+(S.sel.size>1?'s':''):'toute la classe')+'</b></span></div>'
+    +'<div class="jp-grid">'+cards+'</div></div></div>';
+}
+
+/* ---------- Feuilles (fenêtres dans l'iPad) ---------- */
+function shHead(left,title,right){return '<div class="sh-h">'+left+'<b>'+title+'</b>'+(right||'<span></span>')+'</div>'}
+const cancelBtn='<button class="tb" data-a="sh-cancel" style="justify-self:start">Annuler</button>';
+function forLabel(ids){const n=ids.length;return n===S.students.length?'toute la classe ('+n+' élèves)':n===1?S.students[ids[0]].n:n+' élèves'}
+function sheetHTML(){
+  const h=S.sheet;let inner='';
+  if(h.type==='open'){
+    const apps=PICKABLE.filter(k=>h.disc==='Toutes'||APPS[k].d.includes(h.disc)||APPS[k].d.includes('Toutes'));
+    inner=shHead(cancelBtn,'Ouvrir une app','<button class="tb bold" data-a="sh-open"'+(h.pick?'':' disabled')+'>Ouvrir</button>')
+      +'<div class="sh-b"><div class="chipsrow">'+DISCIPLINES.map(d=>'<button class="'+(d===h.disc?'on':'')+'" data-a="disc" data-v="'+d+'">'+d+'</button>').join('')+'</div>'
+      +'<div class="grp">'+apps.map(k=>'<button class="gi" data-a="pick" data-v="'+k+'">'+icon(k)+APPS[k].n+(h.pick===k?'<span class="tick">✓</span>':'')+'</button>').join('')+'</div>'
+      +'<div class="grp"><label class="gi">Verrouiller dans l\'app<input type="checkbox" class="sw" data-fc="single"'+(h.single?' checked':'')+'></label></div>'
+      +'<p class="sh-note">Pour : '+forLabel(h.ids)+'. Verrouillé dans l\'app, l\'élève ne peut pas revenir à l\'écran d\'accueil.</p></div>';
+  }else if(h.type==='nav'){
+    inner=shHead(cancelBtn,'Naviguer','<button class="tb bold" data-a="sh-nav">Envoyer</button>')
+      +'<div class="sh-b"><div class="grp"><div class="gi"><input type="text" data-f="url" value="'+esc(h.url||'')+'" placeholder="Adresse web, ex. lumni.fr" aria-label="Adresse web"></div></div><div class="sh-sec">Suggestions</div>'
+      +'<div class="grp">'+SITES.map(s=>'<button class="gi" data-a="site" data-v="'+s.u+'"><span class="ai" style="font-size:8px;background:#E5ECF5;color:#4A6A8A"><i>'+s.n[0]+'</i></span><span>'+s.n+'<br><small style="color:#8A8A8E">'+s.u+'</small></span></button>').join('')+'</div><p class="sh-note">Pour : '+forLabel(h.ids)+'.</p></div>';
+  }else if(h.type==='air'){
+    const s=S.students[h.id];
+    inner=shHead(cancelBtn,'AirPlay')+'<div class="sh-b"><p class="sh-note">Projeter l\'écran de <b>'+s.n+'</b> sur :</p><div class="grp"><button class="gi" data-a="dest" data-v="104">'+'<span class="ai" style="font-size:8px;background:#1C1C1E"><i>▭</i></span>Vidéoprojecteur – Salle 104</button><button class="gi" data-a="dest" data-v="cdi"><span class="ai" style="font-size:8px;background:#8E8E93"><i>▭</i></span>Apple TV – CDI <small style="margin-left:auto;color:#8A8A8E">hors de portée</small></button></div></div>';
+  }else if(h.type==='group'){
+    const pick=new Set(h.pick);
+    inner=shHead(cancelBtn,'Nouveau groupe','<button class="tb bold" data-a="sh-group"'+(pick.size?'':' disabled')+'>Créer</button>')
+      +'<div class="sh-b"><div class="grp"><div class="gi"><input type="text" data-f="name" value="'+esc(h.name)+'" aria-label="Nom du groupe"></div></div><div class="sh-sec">Élèves ('+pick.size+')</div><div class="grp">'
+      +S.students.map(s=>'<button class="gi" data-a="gpick" data-v="'+s.id+'"><span class="av" style="width:28px;height:28px;border-radius:50%;background:'+s.c+';color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600">'+initials(s.n)+'</span>'+s.n+(pick.has(s.id)?'<span class="tick">✓</span>':'')+'</button>').join('')+'</div></div>';
+  }else if(h.type==='detail'){
+    const s=S.students[h.id];
+    const gi=(a,ic,l)=>'<button class="gi blue" data-a="'+a+'"><span style="width:22px;display:grid;place-items:center"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#007AFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ICONS[ic]+'</svg></span>'+l+'</button>';
+    inner=shHead('<span></span>',s.n,'<button class="tb bold" data-a="sh-cancel">OK</button>')
+      +'<div class="sh-b"><div class="detail"><div class="bigscr">'+scr(s)+'</div><div style="display:grid;gap:10px"><div class="grp">'
+      +gi('d-open','open','Ouvrir une app…')+gi('d-nav','web','Naviguer…')+gi('d-lock',s.locked?'unlock':'lock',s.locked?'Déverrouiller':'Verrouiller')+gi('d-mute','mute',s.muted?'Rétablir le son':'Couper le son')+gi('d-air','airplay','AirPlay')
+      +'</div><p class="sh-note">'+(s.locked?'Écran verrouillé':s.app==='home'?'Sur l\'écran d\'accueil':'Utilise '+(s.app==='safari'?s.url:APPS[s.app].n))+'.</p></div></div></div>';
+  }else if(h.type==='apply'){
+    inner=shHead(cancelBtn,'Appliquer une leçon','<button class="tb bold" data-a="sh-apply"'+(h.lesson?'':' disabled')+'>Appliquer</button>')
+      +'<div class="sh-b"><div class="sh-sec">Leçon</div><div class="grp">'+S.lessons.filter(l=>l.id!=='quick').map(L=>'<button class="gi" data-a="lessonpick" data-v="'+L.id+'">'+svg('lessons').replace('<svg','<svg width="20" height="20" fill="none" stroke="#007AFF" stroke-width="1.8"')+esc(L.n)+(h.lesson===L.id?'<span class="tick">✓</span>':'')+'</button>').join('')+'</div>'
+      +'<div class="sh-sec">Durée</div><div class="segc">'+['Fin du cours','30 min','55 min'].map(d=>'<button class="'+(h.dur===d?'on':'')+'" data-a="dur" data-v="'+d+'">'+d+'</button>').join('')+'</div>'
+      +'<p class="sh-note">Pour : '+forLabel(h.ids)+'. Les apps non autorisées sont masquées sur leurs iPad.</p></div>';
+  }else if(h.type==='attn'){
+    const any=byIds(h.ids).some(s=>s.attention);
+    inner=shHead(cancelBtn,'Message','<button class="tb bold" data-a="sh-attn">Envoyer</button>')
+      +'<div class="sh-b"><div class="grp"><div class="gi"><input type="text" data-f="msg" value="'+esc(h.msg)+'" aria-label="Message"></div></div>'
+      +'<div class="grp"><label class="gi">Afficher en écran d\'attention<input type="checkbox" class="sw" data-fc="lockatt"'+(h.lockatt!==false?' checked':'')+'></label></div>'
+      +'<p class="sh-note">Pour : '+forLabel(h.ids)+'. En écran d\'attention, les iPad sont verrouillés et affichent le message.</p>'
+      +(any?'<div class="grp"><button class="gi blue" data-a="jattoff">Retirer l\'écran d\'attention</button></div>':'')+'</div>';
+  }else if(h.type==='jstu'){
+    const s=S.students[h.id];
+    if(h.page==='applock'){
+      const list=PICKABLE.concat(['safari'],S.installed);
+      inner='<div class="sh-h"><button class="tb" data-a="jback" style="justify-self:start">‹ Retour</button><b>Verrouiller dans une app</b><span></span></div><div class="sh-b"><div class="grp"><div class="gi"><input type="text" data-f="q" placeholder="Rechercher" aria-label="Rechercher une app"></div></div><div class="jgrid-apps">'+list.map(k=>'<button class="japp" data-a="applock" data-v="'+k+'" data-appname="'+APPS[k].n.toLowerCase()+'">'+icon(k)+'<span>'+APPS[k].n+'</span></button>').join('')+'</div><p class="sh-note">'+s.n+' ne pourra pas quitter l\'app choisie.</p></div>';
+    }else{
+      const L=s.lesson&&S.lessons.find(l=>l.id===s.lesson);
+      const row=(a,l,cls)=>'<button class="gi'+(cls?' '+cls:'')+'" data-a="'+a+'">'+l+'<span class="tick" style="color:#C7C7CC;font-weight:400">›</span></button>';
+      inner=shHead(cancelBtn,s.n,'<button class="tb bold" data-a="sh-cancel">OK</button>')
+        +'<div class="sh-b"><div class="jprof"><span class="jav big" style="background:'+s.c+'">'+s.n[0]+'</span><div style="min-width:0"><b>'+s.n+'</b><small>iPad (Wi-Fi) · '+s.dev+'</small><small>Vu il y a 2 minutes · batterie '+s.bat+' %</small><small>'+(L?'Leçon : '+esc(L.n):'Aucune restriction')+'</small></div><div class="bigscr" style="width:78px;margin-left:auto;flex:none;border-radius:8px;overflow:hidden">'+scr(s)+'</div></div>'
+        +'<div class="grp">'+row('jlockapp','Verrouiller dans une app')+(s.single?'<button class="gi blue" data-a="junlockapp">Libérer de l\'app '+APPS[s.app].n+'</button>':'')+row('jmsg1','Envoyer un message')+row('jclearpw','Effacer le code'+(s.forgot?' <span class="pill warn" style="margin-left:8px">Code oublié</span>':''))+row('jlift1','Lever les restrictions')+'</div></div>';
+    }
+  }else if(h.type==='restr'){
+    const set=new Set(h.apps||[]);
+    inner=shHead(cancelBtn,'Restrictions','<button class="tb bold" data-a="sh-restr">Appliquer</button>')
+      +'<div class="sh-b"><p class="sh-note">Restriction rapide, sans préparer de leçon. Pour : '+forLabel(h.ids)+'.</p><div class="sh-sec">Apps autorisées</div><div class="grp">'+PICKABLE.concat(S.installed).map(k=>'<label class="gi">'+icon(k)+APPS[k].n+'<input type="checkbox" class="sw" data-app="'+k+'"'+(set.has(k)?' checked':'')+'></label>').join('')+'</div>'
+      +'<div class="sh-sec">Web</div><div class="segc">'+[['bloqué','Bloqué'],['liste','Sites autorisés'],['libre','Filtre établ.']].map(([v,l])=>'<button class="'+(h.web===v?'on':'')+'" data-a="nlweb" data-v="'+v+'">'+l+'</button>').join('')+'</div>'
+      +'<div class="grp"><label class="gi">Appareil photo<input type="checkbox" class="sw" data-fc="cam"'+(h.cam?' checked':'')+'></label></div>'+(h.err?'<p class="sh-note" style="color:#FF3B30">'+h.err+'</p>':'')+'</div>';
+  }else if(h.type==='install'){
+    const ex=[['bookcreator','Livres numériques multimédias'],['kahoot','Quiz en classe'],['scratchjr','Programmation par blocs']];
+    inner=shHead('<span></span>','Installer des apps','<button class="tb bold" data-a="sh-cancel">OK</button>')
+      +'<div class="sh-b"><p class="sh-note">Apps mises à disposition par l\'établissement. Pour : '+forLabel(h.ids)+'.</p><div class="grp">'+ex.map(([k,d])=>'<div class="gi">'+icon(k)+'<span style="min-width:0">'+APPS[k].n+'<br><small style="color:#8A8A8E">'+d+'</small></span>'+(S.installed.includes(k)?'<span class="jpill" style="margin-left:auto;color:#8A8A8E">INSTALLÉE</span>':'<button class="jpill" style="margin-left:auto" data-a="jinstall" data-v="'+k+'">INSTALLER</button>')+'</div>').join('')+'</div></div>';
+  }else if(h.type==='clear'){
+    const s=S.students[h.id];
+    inner=shHead(cancelBtn,'Effacer le code')+'<div class="sh-b"><p class="sh-note">L\'iPad de <b>'+s.n+'</b> pourra être déverrouillé sans code. L\'élève en choisira un nouveau.</p><div class="grp"><button class="gi red" data-a="sh-clear">Effacer le code de '+s.n+'</button></div></div>';
+  }else if(h.type==='newlesson'){
+    const set=new Set(h.apps||[]);
+    inner=shHead(cancelBtn,h.editId?'Modifier la leçon':'Nouvelle leçon','<button class="tb bold" data-a="sh-newlesson">Enregistrer</button>')
+      +'<div class="sh-b"><div class="grp"><div class="gi"><input type="text" data-f="name" value="'+esc(h.name||'')+'" placeholder="Nom, ex. Maths – géométrie" aria-label="Nom de la leçon"></div></div>'
+      +'<div class="sh-sec">Apps autorisées</div><div class="grp">'+PICKABLE.map(k=>'<label class="gi">'+icon(k)+APPS[k].n+'<input type="checkbox" class="sw" data-app="'+k+'"'+(set.has(k)?' checked':'')+'></label>').join('')+'</div>'
+      +'<div class="sh-sec">Web</div><div class="segc">'+[['bloqué','Bloqué'],['liste','Sites autorisés'],['libre','Filtre établ.']].map(([v,l])=>'<button class="'+(h.web===v?'on':'')+'" data-a="nlweb" data-v="'+v+'">'+l+'</button>').join('')+'</div>'
+      +'<div class="grp"><label class="gi">Appareil photo<input type="checkbox" class="sw" data-fc="cam"'+(h.cam?' checked':'')+'></label></div>'
+      +(h.err?'<p class="sh-note" style="color:#FF3B30">'+h.err+'</p>':'')+'</div>';
+  }
+  return '<div class="sh-bg" data-a="sh-bg"><div class="sheet'+(h.type==='detail'?' wide':'')+'" role="dialog" aria-modal="true">'+inner+'</div></div>';
+}
+
+/* ---------- Actions ---------- */
+const byIds=ids=>ids.map(i=>S.students[i]);
+function doOpen(ids,k,single){
+  const T=byIds(ids);
+  if(single&&T.some(s=>s.app==='jeu'||s.app==='videos'||s.wasDistracted))complete('ec5');
+  T.forEach(s=>{s.app=k;s.single=single;s.locked=false;s.wasDistracted=false});
+  if(k==='keynote'&&S.students.every(s=>s.app==='keynote'))complete('ec1');
+  toast(APPS[k].n+' ouvert sur '+(T.length===1?'l\'iPad de '+T[0].n:T.length+' iPad')+(single?', verrouillé dans l\'app':''));
+}
+function doNav(ids,u){
+  u=(u||'').trim();if(!u)return false;const T=byIds(ids);
+  T.forEach(s=>{s.app='safari';s.url=u;s.locked=false;s.single=false;s.wasDistracted=false});
+  const key=ids.slice().sort((a,b)=>a-b).join(',');
+  if(ids.length>=3&&S.groups.some(g=>g.m.slice().sort((a,b)=>a-b).join(',')===key))complete('ec3');
+  toast(u+' ouvert sur '+(T.length===1?'l\'iPad de '+T[0].n:T.length+' iPad'));return true;
+}
+function doLock(T,to){
+  T.forEach(s=>s.locked=to);
+  if(to&&wholeClass(T))S.lockedAllOnce=true;
+  if(!to&&S.lockedAllOnce&&wholeClass(T))complete('ec2');
+  toast((to?'Verrouillé : ':'Déverrouillé : ')+(T.length===1?T[0].n:T.length+' iPad'));
+}
+function doMute(T,to){T.forEach(s=>s.muted=to);if(to&&wholeClass(T))complete('ec6');toast(to?'Son coupé':'Son rétabli')}
+
+function onTap(e){
+  const b=e.target.closest('[data-a]');if(!b)return;
+  const a=b.dataset.a, v=b.dataset.v, h=S.sheet;
+  if(a==='sh-bg'){if(e.target===b){S.sheet=null;render()}return}
+  const ids=()=>targets().map(s=>s.id);
+  switch(a){
+    case 'sh-cancel':S.sheet=null;break;
+    case 'otherclass':toast('Classe d\'exemple : entraînez-vous avec la 5e B');return;
+    case 'scope':S.scope=v;S.sel.clear();break;
+    case 'selmode':S.selMode=!S.selMode;if(!S.selMode)S.sel.clear();break;
+    case 'end':S.students.forEach(s=>Object.assign(s,{app:'home',locked:false,single:false,muted:false,url:''}));S.airplay=null;S.sel.clear();S.selMode=false;S.showScreens=false;S.scope='all';toast('Cours terminé : les iPad sont libérés');break;
+    case 'card':{const id=+v;if(S.selMode){S.sel.has(id)?S.sel.delete(id):S.sel.add(id)}else S.sheet={type:'detail',id};break;}
+    case 'open':if(!targets().length)return;S.sheet={type:'open',disc:'Toutes',pick:null,single:false,ids:ids()};break;
+    case 'nav':if(!targets().length)return;S.sheet={type:'nav',ids:ids(),url:''};break;
+    case 'lock':{const T=targets();if(!T.length)return;doLock(T,!T.every(s=>s.locked));break;}
+    case 'mute':{const T=targets();if(!T.length)return;doMute(T,!T.every(s=>s.muted));break;}
+    case 'screens':S.showScreens=!S.showScreens;toast(S.showScreens?'Écrans affichés : les élèves voient l\'indicateur bleu':'Écrans masqués');break;
+    case 'air':{const T=targets();if(T.length!==1)return;S.sheet={type:'air',id:T[0].id};break;}
+    case 'newgroup':S.sheet={type:'group',name:'Groupe '+(S.groups.length+1),pick:[...S.sel]};break;
+    case 'gpick':{const set=new Set(h.pick);const id=+v;set.has(id)?set.delete(id):set.add(id);h.pick=[...set];break;}
+    case 'sh-group':if(!h.pick.length)return;S.groups.push({n:(h.name||'').trim()||'Groupe '+(S.groups.length+1),m:h.pick});S.scope='g:'+(S.groups.length-1);S.sel.clear();S.selMode=false;S.sheet=null;toast('Groupe créé');break;
+    case 'disc':h.disc=v;break;
+    case 'pick':h.pick=v;break;
+    case 'sh-open':if(!h.pick)return;doOpen(h.ids,h.pick,!!h.single);S.sheet=null;break;
+    case 'site':doNav(h.ids,v);S.sheet=null;break;
+    case 'sh-nav':if(doNav(h.ids,h.url))S.sheet=null;else return;break;
+    case 'dest':if(v==='cdi'){toast('Apple TV – CDI est hors de portée');return}S.airplay=h.id;complete('ec4');toast('Écran de '+S.students[h.id].n+' projeté');S.sheet=null;break;
+    case 'd-open':S.sheet={type:'open',disc:'Toutes',pick:null,single:false,ids:[h.id]};break;
+    case 'd-nav':S.sheet={type:'nav',ids:[h.id],url:''};break;
+    case 'd-lock':{const s=S.students[h.id];doLock([s],!s.locked);break;}
+    case 'd-mute':{const s=S.students[h.id];doMute([s],!s.muted);break;}
+    case 'd-air':S.sheet={type:'air',id:h.id};break;
+    /* Jamf */
+    case 'jtab':S.jtab=v;break;
+    case 'jsel':{const id=+v;S.sel.has(id)?S.sel.delete(id):S.sel.add(id);break;}
+    case 'jall':if(S.sel.size)S.sel.clear();else S.students.forEach(s=>S.sel.add(s.id));break;
+    case 'apply':S.sheet={type:'apply',lesson:null,dur:'Fin du cours',ids:ids()};break;
+    case 'lapply':S.sheet={type:'apply',lesson:v,dur:'Fin du cours',ids:ids()};break;
+    case 'lessonpick':h.lesson=v;break;
+    case 'dur':h.dur=v;break;
+    case 'sh-apply':{if(!h.lesson)return;const L=S.lessons.find(l=>l.id===h.lesson);const T=byIds(h.ids);
+      T.forEach(s=>{s.lesson=L.id;const al=allowedApps(s);if(s.app!=='home'&&!al.includes(s.app)){s.app='home';s.url=''}});
+      if(L.id==='eval'&&S.students.every(s=>s.lesson==='eval'))complete('jt1');
+      toast('« '+L.n+' » appliquée à '+(T.length===S.students.length?'toute la classe':T.length+' élève(s)')+' · '+h.dur);S.sheet=null;break;}
+    case 'attn':S.sheet={type:'attn',msg:'Posez vos stylets et regardez le tableau',ids:ids(),lockatt:true};break;
+    case 'sh-attn':{const m=(h.msg||'').trim()||'Regardez le tableau';if(h.lockatt!==false){byIds(h.ids).forEach(s=>s.attention=m);toast('Écran d\'attention affiché')}else toast('Message envoyé à '+forLabel(h.ids));S.sheet=null;break;}
+    case 'jattoff':byIds(h.ids).forEach(s=>s.attention=null);toast('Écran d\'attention retiré');S.sheet=null;break;
+    case 'jdev':case 'jres':toast('Fonction non simulée dans cet entraînement');return;
+    case 'jmsghome':toast('Ouvrez la classe 5e B, puis l\'action « Messages »');return;
+    case 'jupd':if(S.updated){toast('Tout est à jour');return}S.updated=true;toast('3 mises à jour installées');break;
+    case 'jopen':S.jscreen='class';break;
+    case 'jleave':S.jscreen='home';S.sel.clear();S.selMode=false;break;
+    case 'jstu':{const id=+v;if(S.selMode){S.sel.has(id)?S.sel.delete(id):S.sel.add(id)}else S.sheet={type:'jstu',id,page:'main'};break;}
+    case 'jback':h.page='main';break;
+    case 'jlockapp':h.page='applock';h.q='';break;
+    case 'applock':{const s=S.students[h.id];if(s.forgot){toast('L\'iPad de '+s.n+' est bloqué par son code');return}s.app=v;s.single=true;s.locked=false;s.wasDistracted=false;if(v==='safari')s.url='lumni.fr';toast(s.n+' est verrouillé dans '+APPS[v].n);S.sheet=null;break;}
+    case 'junlockapp':{const s=S.students[h.id];s.single=false;toast(s.n+' peut à nouveau changer d\'app');break;}
+    case 'jmsg1':S.sheet={type:'attn',msg:'Viens me voir au bureau, s\'il te plaît',ids:[h.id],lockatt:false};break;
+    case 'jclearpw':{const s=S.students[h.id];if(!s.forgot){toast(s.n+' n\'a pas oublié son code');return}S.sheet={type:'clear',id:h.id};break;}
+    case 'jlift1':{const s=S.students[h.id];const had=!!s.lesson||s.single;s.lesson=null;s.single=false;if(had&&S.students.every(x=>!x.lesson))complete('jt4');toast(had?'Restrictions levées pour '+s.n:s.n+' n\'a aucune restriction');break;}
+    case 'restr':{const q=S.lessons.find(l=>l.id==='quick');S.sheet={type:'restr',ids:ids(),apps:q?[...q.apps]:[],web:q?q.web:'bloqué',cam:q?q.cam:false};break;}
+    case 'sh-restr':{if(!(h.apps||[]).length){h.err='Autorisez au moins une app.';break}let q=S.lessons.find(l=>l.id==='quick');if(!q){q={id:'quick',n:'Restrictions rapides'};S.lessons.push(q)}Object.assign(q,{apps:h.apps,web:h.web,cam:!!h.cam});
+      byIds(h.ids).forEach(s=>{s.lesson='quick';const al=allowedApps(s);if(s.app!=='home'&&!al.includes(s.app)){s.app='home';s.url='';s.single=false}});toast('Restrictions appliquées à '+forLabel(h.ids));S.sheet=null;break;}
+    case 'install':S.sheet={type:'install',ids:ids()};break;
+    case 'jinstall':S.installed.push(v);toast(APPS[v].n+' en cours d\'installation sur les iPad');break;
+    case 'jedit':{const L=S.lessons.find(l=>l.id===v);S.sheet={type:'newlesson',editId:v,name:L.n,apps:[...L.apps],web:L.web,cam:L.cam};break;}
+    case 'lift':{const T=targets();const had=T.some(s=>s.lesson);T.forEach(s=>s.lesson=null);
+      if(had&&S.students.every(s=>!s.lesson))complete('jt4');toast(had?'Restrictions levées':'Aucune leçon active sur ces iPad');break;}
+    case 'clearpw':{if(S.sel.size!==1)return;const id=[...S.sel][0];if(!S.students[id].forgot){toast(S.students[id].n+' n\'a pas oublié son code');return}S.sheet={type:'clear',id};break;}
+    case 'sh-clear':{const s=S.students[h.id];s.forgot=false;s.app='home';complete('jt3');toast('Code de '+s.n+' effacé');S.sheet=null;break;}
+    case 'newlesson':S.sheet={type:'newlesson',name:'',apps:[],web:'bloqué',cam:false};break;
+    case 'nlweb':h.web=v;break;
+    case 'sh-newlesson':{const n=(h.name||'').trim();if(!n||!(h.apps||[]).length){h.err='Donnez un nom à la leçon et autorisez au moins une app.';break}
+      if(h.editId){Object.assign(S.lessons.find(l=>l.id===h.editId),{n,apps:h.apps,web:h.web,cam:!!h.cam});S.students.forEach(s=>{const al=allowedApps(s);if(al&&s.app!=='home'&&!al.includes(s.app)){s.app='home';s.single=false}});toast('Leçon modifiée')}
+      else{S.lessons.push({id:'c'+Date.now(),n,apps:h.apps,web:h.web,cam:!!h.cam});complete('jt2')}S.sheet=null;break;}
+    default:return;
+  }
+  render();
+}
+
+/* ---------- Élèves distraits ---------- */
+function distractTick(){
+  if(!S||!S.distract||S.sheet)return;
+  const pool=S.students.filter(s=>!s.locked&&!s.single&&!s.forgot&&!s.attention&&s.app!=='jeu'&&s.app!=='videos');
+  if(!pool.length)return;
+  const s=pool[Math.floor(Math.random()*pool.length)];
+  const want=Math.random()<.5?'jeu':'videos';
+  const al=allowedApps(s);
+  if(al&&!al.includes(want)){
+    s.blockedMsg=APPS[want].n+' : bloqué';S.flash=s.id;render();
+    setTimeout(()=>{s.blockedMsg=null;if(S.flash===s.id)S.flash=null;render()},3500);return;
+  }
+  s.app=want;s.wasDistracted=true;S.flash=s.id;render();
+  setTimeout(()=>{if(S&&S.flash===s.id){S.flash=null}},3200);
+}
+
+const VIEWS=['accueil','se-former','tutoriels','enclasse','jamf'];
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.view));
+const fromHash=()=>{const h=location.hash.slice(1);return VIEWS.includes(h)?h:'accueil'};
+window.addEventListener('hashchange',()=>setView(fromHash()));
+updateProgress();setView(fromHash());
+})();
+</script>
+
+</body></html>
