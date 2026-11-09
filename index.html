@@ -591,6 +591,11 @@ body.locked{overflow:hidden}
 .oth b{font-size:22px;font-weight:600}
 .oth p{margin:0;max-width:440px;color:#6C6C70;font-size:13.5px;line-height:1.45}
 .oth .oth-rub{font-size:12.5px;font-weight:600;color:#8A8A8E;text-transform:uppercase;letter-spacing:.04em}
+.ai.im{background:#fff}
+.ai.im::before{display:none}
+.ai.im img{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;display:block}
+.oth .oth-uses{margin:0;padding:0;list-style:none;display:grid;gap:6px;max-width:460px;text-align:left}
+.oth .oth-uses li{background:#F2F2F7;border-radius:10px;padding:8px 12px;font-size:13.5px;color:#1C1C1E}
 .oth .oth-desc{color:#1C1C1E;font-size:15px;max-width:460px}
 .oth .oth-link{color:#007AFF;font-size:15px;font-weight:600;text-decoration:none;padding:8px 16px;border-radius:999px;background:#EEF4FF}
 .mtabs{display:flex;gap:4px;background:var(--v6);border-radius:10px;padding:3px}
@@ -692,6 +697,8 @@ footer{border-top:1px solid var(--v25);padding-block:20px;font-size:12px;color:v
 </script>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 
+<script src="catalogue-data.js"></script>
+<script src="catalogue-icons.js"></script>
 <script>
 (function(){
 const ICONS={
@@ -883,8 +890,8 @@ function portalHTML(){
       <span class="pic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span>
       <span class="eyebrow">Parcours 02</span>
       <h2>Découvrir les applis en classe</h2>
-      <p>Une sélection d'applications classées par discipline et par usage, avec une courte présentation de chacune et un lien direct vers l'App Store.</p>
-      <div class="figs"><div><b>122</b><span>applications</span></div><div><b>15</b><span>rubriques</span></div></div>
+      <p>Un catalogue classé par discipline, avec une courte présentation de chaque application, deux idées d'usage en classe et un lien direct vers l'App Store.</p>
+      <div class="figs"><div><b>356</b><span>applications</span></div><div><b>270</b><span>gratuites</span></div><div><b>31</b><span>coups de cœur</span></div><div><b>15</b><span>domaines</span></div></div>
       <a class="btn" href="${APPS_URL}" target="_blank" rel="noopener">Découvrir les applis ${EXT}</a>
     </article>
     <article class="door">
@@ -1066,215 +1073,14 @@ Object.assign(APPS,{
 });
 function icon(k){
   const a=APPS[k];
+  if(a.img)return '<span class="ai im"><img src="data:image/webp;base64,'+a.img+'" alt=""></span>';
   let inner;
   if(a.cal){const d=new Date();inner='<span class="calic"><b>'+d.toLocaleDateString('fr-FR',{weekday:'short'}).replace('.','')+'</b><i>'+d.getDate()+'</i></span>'}
   else if(a.s)inner='<svg viewBox="0 0 24 24" fill="none" stroke="'+(a.fg||'#fff')+'" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+a.s+'</svg>';
   else inner='<i>'+a.l+'</i>';
   return '<span class="ai" style="background:linear-gradient(160deg,'+a.g[0]+','+a.g[1]+');'+(a.fg?'color:'+a.fg+';box-shadow:inset 0 0 0 .06em #D1D1D6':'')+'">'+inner+'</span>';
 }
-const CAT = [
-  { id: "classe", title: "Gérer la classe et la vie scolaire",
-    intro: "Piloter les iPad des élèves, distribuer le travail, garder le lien avec les familles.",
-    apps: [
-      ["Classroom (En classe)", "1085319084", "L’app d’Apple pour l’enseignant : voir les écrans des élèves, ouvrir la même app ou le même site sur tous les iPad, verrouiller les appareils, partager des fichiers par AirDrop et former des groupes.", "Gratuit", ["Tous niveaux"]],
-      ["Schoolwork (Pour l’école)", "1355112526", "Distribue des devoirs dans les apps, suit la progression de chaque élève et centralise les documents rendus. Nécessite Apple School Manager.", "Gratuit", ["Tous niveaux"]],
-      ["PRONOTE", "1138223804", "Cahier de textes, saisie des notes et compétences, appel, emploi du temps et messagerie avec élèves et familles.", "Gratuit", ["Collège", "Lycée"]],
-      ["Seesaw", "930565184", "Portfolio numérique : les élèves déposent photos, vidéos, dessins ou enregistrements audio, l’enseignant commente et partage avec les familles.", "Freemium", ["Primaire"]],
-      ["ClassDojo", "552602056", "Valorisation des comportements par points, portfolio d’élève et messagerie traduite avec les familles.", "Freemium", ["Primaire"]],
-      ["Padlet", "834618886", "Murs collaboratifs où chacun publie texte, image, lien ou vidéo. Pratique pour un remue-méninges, une galerie de productions ou une banque de ressources.", "Freemium", ["Tous niveaux"]],
-      ["Jamf Teacher", "1458800229", "Pour les établissements équipés de Jamf : verrouiller les iPad sur une app, bloquer des sites et pousser des applis pendant le cours.", "Gratuit", ["Tous niveaux"]]
-    ] },
-
-  { id: "evaluer", title: "Évaluer et faire participer",
-    intro: "Questionner toute la classe, vérifier la compréhension en direct, réviser.",
-    apps: [
-      ["Plickers", "701184049", "QCM instantanés avec des cartes papier imprimées : seul l’iPad de l’enseignant scanne les réponses de la classe. Idéal quand les élèves n’ont pas d’appareil.", "Freemium", ["Tous niveaux"]],
-      ["Kahoot!", "1131203560", "Quiz chronométrés en mode jeu, en classe entière ou en équipes, avec une banque de quiz partagés par d’autres enseignants.", "Freemium", ["Tous niveaux"]],
-      ["Quizlet", "546473125", "Cartes mémoire, tests et jeux d’apprentissage créés par l’enseignant ou tirés d’une vaste bibliothèque. Mode « Live » pour jouer en équipes.", "Freemium", ["Collège", "Lycée"]],
-      ["Socrative Student", "477618130", "Les élèves répondent aux questionnaires et aux billets de sortie lancés par l’enseignant, avec résultats en temps réel.", "Freemium", ["Collège", "Lycée"]],
-      ["Wayground (ex-Quizizz)", "1160249042", "Quiz et leçons interactives que les élèves font en direct ou en devoir, à leur rythme, avec rapports détaillés par question.", "Freemium", ["Collège", "Lycée"]],
-      ["Nearpod", "523540409", "Diaporamas interactifs synchronisés sur les écrans élèves : sondages, dessins, questions ouvertes, visites virtuelles.", "Freemium", ["Tous niveaux"]],
-    ] },
-
-  { id: "creer", title: "Créer, présenter, publier",
-    intro: "Les outils de production multimédia, utiles dans toutes les disciplines.",
-    apps: [
-      ["Keynote", "361285480", "Présentations animées, mais aussi affiches, romans-photos et petits films d’animation grâce aux transitions et au dessin intégré.", "Gratuit", ["Tous niveaux"]],
-      ["Pages", "361309726", "Traitement de texte et mise en page : comptes rendus, journaux de classe, livres numériques au format EPUB, dictée vocale.", "Gratuit", ["Tous niveaux"]],
-      ["Numbers", "361304891", "Tableur visuel pour relever des mesures, construire des graphiques et faire des statistiques simples.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["Freeform", "6443742539", "Tableau blanc infini et collaboratif : cartes mentales, schémas, collages d’images et de documents à plusieurs.", "Gratuit", ["Tous niveaux"]],
-      ["iMovie", "377298193", "Montage vidéo simple avec bandes-annonces prêtes à l’emploi, incrustation sur fond vert et doublage audio.", "Gratuit", ["Tous niveaux"]],
-      ["Book Creator", "442378070", "Livres numériques mêlant texte, dessin, audio et vidéo, exportables en EPUB ou en vidéo. Un classique de la création en classe.", "Payant", ["Tous niveaux"]],
-      ["Explain Everything", "1020339980", "Tableau blanc qui enregistre tout ce qu’on y dessine et dit : capsules vidéo, corrections commentées, classe inversée.", "Freemium", ["Tous niveaux"]],
-      ["Canva", "897446215", "Affiches, infographies, présentations et vidéos à partir de modèles. Offre Canva pour l’Éducation gratuite pour les enseignants.", "Freemium", ["Collège", "Lycée"]],
-      ["Adobe Express", "1051937863", "Création rapide de visuels, vidéos courtes et pages web à partir de modèles, avec retrait d’arrière-plan.", "Freemium", ["Collège", "Lycée"]],
-      ["Stop Motion Studio", "441651297", "Films d’animation image par image avec pelures d’oignon, montage et bruitage. Très utilisé de la maternelle au lycée.", "Freemium", ["Tous niveaux"]],
-      ["Green Screen by Do Ink", "730091131", "Incrustation sur fond vert pour placer les élèves dans un paysage, une époque ou un bulletin météo.", "Payant", ["Tous niveaux"]],
-      ["ChatterPix Kids", "734046126", "On dessine une bouche sur une photo et l’image parle avec la voix de l’élève. Idéal pour faire parler un personnage ou un animal.", "Gratuit", ["Cycle 1", "Primaire"]],
-      ["Comic Life 3", "891378056", "Bandes dessinées et romans-photos avec cases, bulles et lettrage, à partir des photos de la classe.", "Payant", ["Primaire", "Collège"]],
-      ["Popplet Lite", "364738549", "Cartes mentales simples avec texte, images et dessins pour organiser des idées ou un vocabulaire.", "Gratuit", ["Primaire", "Collège"]],
-      ["Goodnotes", "1444383602", "Carnet de notes manuscrites et annotation de PDF à l’Apple Pencil. Pratique pour préparer et corriger.", "Freemium", ["Enseignant", "Lycée"]],
-      ["Notability", "360593530", "Prise de notes manuscrites synchronisée avec l’enregistrement audio, annotation de PDF.", "Freemium", ["Enseignant", "Lycée"]],
-      ["Microsoft OneNote", "410395246", "Bloc-notes organisé par sections, partageable avec la classe, avec le Lecteur immersif pour les élèves en difficulté de lecture.", "Gratuit", ["Tous niveaux"]]
-    ] },
-
-  { id: "ressources", title: "Ressources et révisions",
-    intro: "Cours et exercices prêts à l’emploi, toutes disciplines.",
-    apps: [
-      ["ANTON", "1180554775", "Exercices de la maternelle à la 6e dans toutes les matières, alignés sur les programmes, sans publicité. L’enseignant peut créer une classe et assigner des tâches.", "Freemium", ["Cycle 1", "Primaire", "Collège"]],
-      ["Khan Academy", "469863705", "Cours en vidéo et exercices progressifs en mathématiques et en sciences, avec suivi de la progression.", "Gratuit", ["Collège", "Lycée"]]
-    ] },
-
-  { id: "francais", title: "Français",
-    intro: "Lecture, écriture, orthographe, vocabulaire et patrimoine littéraire.",
-    apps: [
-      ["GraphoGame : Français", "6744646685", "Jeu d’entraînement aux correspondances lettres-sons, qui s’adapte au rythme de chaque enfant. Conçu à partir de la recherche en sciences cognitives.", "Gratuit", ["Cycle 1", "CP"]],
-      ["Graphonémo", "1457617216", "Apprentissage du code alphabétique et de la lecture par des activités audio-visuelles progressives.", "Freemium", ["Cycle 1", "CP"]],
-      ["LetterSchool", "940502457", "Tracé guidé des lettres et des chiffres, avec le geste moteur animé étape par étape.", "Freemium", ["Cycle 1", "CP"]],
-      ["Dynamilis", "1562092398", "Rééducation et entraînement de l’écriture manuscrite au stylet : l’appli analyse le geste et propose des jeux ciblés.", "Freemium", ["Primaire"]],
-      ["Dictionnaire Le Robert Mobile", "1018216485", "Le dictionnaire Le Robert complet, hors ligne : définitions, synonymes, conjugaisons et remarques d’usage.", "Payant", ["Primaire", "Collège", "Lycée"]],
-      ["Bescherelle Conjugaison", "6745481522", "Tous les verbes conjugués avec règles et exercices, dans la référence des éditions Hatier.", "Freemium", ["Collège", "Lycée"]],
-      ["Orthographe Projet Voltaire", "444701410", "Entraînement personnalisé à l’orthographe et à la grammaire, qui repère les règles mal maîtrisées.", "Freemium", ["Collège", "Lycée"]],
-      ["Antidote Mobile (français)", "1468355283", "Dictionnaires complets et guides de langue d’Antidote, avec recherche de cooccurrences et de synonymes.", "Payant", ["Lycée", "Enseignant"]],
-      ["Gallica", "561943007", "La bibliothèque numérique de la BnF : œuvres patrimoniales, manuscrits, presse ancienne et gravures à consulter librement.", "Gratuit", ["Collège", "Lycée"]],
-    ],
-    see: "Book Creator, Comic Life 3 et ChatterPix Kids (rubrique Créer) se prêtent très bien à l’écriture et à l’oral." },
-
-  { id: "maths", title: "Mathématiques",
-    intro: "Géométrie dynamique, calcul, manipulation virtuelle et représentations graphiques.",
-    apps: [
-      ["GeoGebra Suite Calculatrice", "1504416652", "Grapheur, géométrie, 3D, calcul formel et probabilités réunis dans une seule appli.", "Gratuit", ["Collège", "Lycée"]],
-      ["GeoGebra Géométrie", "1232591335", "Constructions géométriques dynamiques : points, droites, cercles, transformations et mesures.", "Gratuit", ["Primaire", "Collège"]],
-      ["GeoGebra 3D", "1445871976", "Solides et surfaces en 3D, avec mode réalité augmentée pour poser un solide sur la table.", "Gratuit", ["Collège", "Lycée"]],
-      ["Desmos Graphing Calculator", "653517540", "Calculatrice graphique très intuitive : courbes, curseurs, inéquations, tableaux de valeurs.", "Gratuit", ["Collège", "Lycée"]],
-      ["Calculatrice NumWorks", "1456585807", "L’émulateur de la calculatrice NumWorks utilisée au lycée, avec Python, pour projeter les manipulations au tableau.", "Gratuit", ["Lycée"]],
-      ["Number Pieces (MLC)", "605433778", "Blocs de base dix virtuels pour comprendre la numération, l’addition et la soustraction avec retenue.", "Gratuit", ["Primaire"]],
-      ["Number Frames (MLC)", "873198123", "Cadres à 5, 10, 20 et 100 cases pour travailler la décomposition et le sens du nombre.", "Gratuit", ["Cycle 1", "Primaire"]],
-      ["Number Line (MLC)", "751816884", "Droite numérique manipulable pour les nombres entiers, les fractions et les décimaux.", "Gratuit", ["Primaire", "Collège"]],
-      ["Geoboard (MLC)", "1508606940", "Géoplan virtuel avec élastiques : formes, aires, périmètres, symétries.", "Gratuit", ["Primaire", "Collège"]],
-      ["Geometry Pad", "517461177", "Constructions géométriques à main levée ou précises, avec mesures d’angles et de longueurs.", "Freemium", ["Collège"]],
-      ["Mathador Classe Chrono", "1448690446", "Calcul mental en temps limité : atteindre un nombre cible avec les quatre opérations. Version Solo aussi disponible.", "Gratuit", ["Primaire", "Collège"]],
-      ["Kahoot! Numbers by DragonBox", "1529174508", "Jeu pour construire le sens du nombre et le calcul jusqu’à 100 en manipulant des personnages-nombres.", "Freemium", ["Cycle 1", "Primaire"]],
-      ["Kahoot! Algebra by DragonBox", "1550574178", "Découverte de la résolution d’équations sous forme de jeu, sans formalisme au départ.", "Freemium", ["Primaire", "Collège"]],
-      ["Photomath", "919087726", "Photographie un calcul ou une équation et détaille la résolution pas à pas. Outil d’autocorrection à encadrer.", "Freemium", ["Collège", "Lycée"]]
-    ] },
-
-  { id: "sciences", title: "Sciences : SVT, physique-chimie, astronomie",
-    intro: "Mesurer avec les capteurs de l’iPad, simuler circuits et optique, observer le vivant, explorer le ciel et le corps en 3D.",
-    apps: [
-      ["phyphox", "1127319693", "Transforme les capteurs de l’appareil en laboratoire : accélération, son, pression, lumière, magnétisme. Expériences prêtes à l’emploi et export des données.", "Gratuit", ["Collège", "Lycée"]],
-      ["Vernier Graphical Analysis", "1385963326", "Acquisition et analyse de données avec les capteurs Vernier, ou saisie manuelle : graphiques, modélisation, tangentes.", "Gratuit", ["Lycée"]],
-      ["Vernier Video Physics", "389784247", "Pointage vidéo d’un mouvement pour tracer position, vitesse et trajectoire.", "Payant", ["Lycée"]],
-      ["FizziQ", "1516870599", "Cahier d’expériences scientifiques : plus de 50 mesures issues des capteurs (son, lumière, couleur, accélération, magnétisme…), analyse vidéo du mouvement, graphiques et export PDF ou CSV. Protocoles partagés par code QR.", "Gratuit", ["Collège", "Lycée"]],
-      ["FizziQ Tools", "6736976867", "Outils complémentaires de FizziQ : transformer une vidéo en chronophotographie et analyser les données reçues des cartes FizziQ Connect.", "Gratuit", ["Collège", "Lycée"]],
-      ["Physics Lab AR", "1298984261", "Laboratoire virtuel : circuits électriques en 3D avec plus de 100 composants, électromagnétisme avec lignes de champ et mécanique céleste, avec un mode réalité augmentée.", "Freemium", ["Collège", "Lycée"]],
-      ["AR.X Optics", "1613699573", "Optique en réalité augmentée, développée par l’université de Mayence : lasers, miroirs, lentilles et prismes virtuels posés sur des cartes imprimées, interférences comprises.", "Gratuit", ["Lycée"]],
-      ["Optics Simulator - Ray Diagram", "6773525708", "Dix simulateurs de tracés de rayons : réfraction (loi de Snell-Descartes), lentilles minces, miroirs, prismes, œil, lunette. On déplace l’objet et la lentille, l’image se recalcule en direct.", "Payant", ["Lycée"]],
-      ["Seek by iNaturalist", "1353224144", "Identifie plantes, animaux et champignons avec la caméra, sans compte et sans géolocalisation partagée. Adapté aux élèves.", "Gratuit", ["Primaire", "Collège"]],
-      ["PlantNet", "600547573", "Identification des plantes par photo, projet de sciences participatives porté notamment par le Cirad et l’Inria.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["Merlin Bird ID", "773457673", "Reconnaît les oiseaux par leur chant ou par photo, avec des fiches illustrées.", "Gratuit", ["Primaire", "Collège"]],
-      ["Stellarium Mobile", "1458716890", "Carte du ciel en temps réel : on pointe l’iPad vers le ciel pour nommer étoiles, planètes et constellations.", "Freemium", ["Primaire", "Collège", "Lycée"]],
-      ["Froggipedia", "1348306157", "Cycle de vie et anatomie de la grenouille en réalité augmentée, avec dissection virtuelle au stylet.", "Payant", ["Collège"]],
-      ["JigSpace", "1111193492", "Modèles 3D animés et commentés (moteur, cœur, éolienne…) à poser en réalité augmentée.", "Freemium", ["Collège", "Lycée"]],
-      ["Merge Object Viewer", "1367544362", "Fait apparaître des modèles 3D dans la main grâce au cube Merge : planètes, organes, fossiles.", "Freemium", ["Primaire", "Collège"]]
-    ] },
-
-  { id: "histoire-geo", title: "Histoire-géographie et EMC",
-    intro: "Cartes, paysages, patrimoine et repères spatiaux.",
-    apps: [
-      ["Google Earth", "293622097", "Globe en 3D, imagerie satellite, Street View et récits guidés Voyager. On peut créer ses propres parcours.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["Cartes IGN (Géoportail)", "748345888", "Cartes IGN, photos aériennes et comparaisons de fonds. Utile aussi pour préparer une course d’orientation.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["Édugéo mobile", "1359701829", "Le service Édugéo de l’IGN sur le terrain, pour les établissements abonnés : cartes, croquis et relevés.", "Gratuit", ["Collège", "Lycée"]],
-      ["Seterra Géographie (complète)", "1093460065", "Quiz de cartes : pays, capitales, fleuves, régions françaises, drapeaux.", "Gratuit", ["Primaire", "Collège"]],
-      ["Earth 3D - World Atlas", "581911397", "Atlas en 3D : reliefs, climats, populations, monuments et merveilles du monde.", "Payant", ["Collège"]],
-      ["Google Arts & Culture", "1050970557", "Œuvres et archives de milliers de musées, visites virtuelles et expositions thématiques sur l’histoire.", "Gratuit", ["Tous niveaux"]]
-    ] },
-
-  { id: "langues", title: "Langues vivantes",
-    intro: "Exposition à la langue, entraînement oral, vocabulaire et traduction.",
-    apps: [
-      ["Les Mini Mondes Explorers", "886123071", "Éveil à l’anglais pour les 4 à 9 ans (ex-Pili Pop) : on s’occupe d’un petit chien en lui parlant anglais, avec reconnaissance vocale.", "Freemium", ["Cycle 1", "Primaire"]],
-      ["Duolingo", "570060128", "Leçons courtes et ludiques dans de nombreuses langues, avec suivi des progrès.", "Freemium", ["Collège", "Lycée"]],
-      ["Memrise", "635966718", "Vocabulaire et expressions avec vidéos de locuteurs natifs.", "Freemium", ["Collège", "Lycée"]],
-      ["ELSA Speak", "1083804886", "Entraînement à la prononciation anglaise avec retour sur chaque son.", "Freemium", ["Lycée"]],
-      ["LingoClip (LyricsTraining)", "1192698323", "Compréhension orale par les chansons : on complète les paroles manquantes d’un clip.", "Freemium", ["Collège", "Lycée"]],
-      ["WordReference", "515127233", "Dictionnaires bilingues avec forum de traduction et prononciations.", "Gratuit", ["Collège", "Lycée"]],
-      ["DeepL", "1552407475", "Traduction de textes, de documents et de photos de texte.", "Freemium", ["Lycée", "Enseignant"]],
-      ["Google Traduction", "414706506", "Traduction instantanée par caméra, conversation et écriture manuscrite. Utile pour accueillir les élèves allophones.", "Gratuit", ["Tous niveaux"]],
-      ["Voice Record Pro", "546983235", "Enregistreur audio complet pour les productions orales, avec partage en MP3.", "Freemium", ["Tous niveaux"]]
-    ] },
-
-  { id: "arts", title: "Arts plastiques",
-    intro: "Dessin, peinture numérique, photographie et animation.",
-    apps: [
-      ["Tayasui Sketches School", "1354087061", "Version éducative et sans publicité de Tayasui Sketches : outils de dessin réalistes et calques.", "Gratuit", ["Primaire", "Collège"]],
-      ["Sketchbook", "883738213", "Dessin et peinture complets avec calques, règles de perspective et symétrie.", "Gratuit", ["Collège", "Lycée"]],
-      ["Procreate", "425073498", "La référence de l’illustration sur iPad, avec des centaines de pinceaux et l’animation simple.", "Payant", ["Lycée", "Enseignant"]],
-      ["Adobe Fresco", "1458660369", "Peinture numérique avec pinceaux aquarelle et huile qui imitent le mélange des couleurs.", "Freemium", ["Collège", "Lycée"]],
-      ["Snapseed", "439438619", "Retouche photo de Google, précise et gratuite, pour travailler cadrage, lumière et retouches locales.", "Gratuit", ["Collège", "Lycée"]],
-      ["FlipaClip", "1101848914", "Animation 2D image par image, à la manière d’un folioscope.", "Freemium", ["Collège", "Lycée"]],
-      ["Animation & Drawing by Do Ink", "364762290", "Dessin vectoriel et animation simple, compatible avec Green Screen by Do Ink.", "Payant", ["Primaire", "Collège"]]
-    ],
-    see: "Google Arts & Culture et Stop Motion Studio sont présentés plus haut." },
-
-  { id: "musique", title: "Éducation musicale",
-    intro: "Créer, jouer, écouter et apprendre la théorie.",
-    apps: [
-      ["GarageBand", "408709785", "Studio d’enregistrement : instruments tactiles, boucles, Live Loops et enregistrement de voix.", "Gratuit", ["Tous niveaux"]],
-      ["Flat", "1177592149", "Écriture de partitions et de tablatures, en collaboration et en ligne.", "Freemium", ["Collège", "Lycée"]],
-      ["Tenuto", "459313476", "Exercices de théorie musicale (musictheory.net) : lecture de notes, intervalles, accords, dictées.", "Payant", ["Collège", "Lycée"]],
-      ["Loopimal", "964743113", "Composer des boucles en déplaçant des blocs pour faire danser des animaux. Première approche du rythme et de la mélodie.", "Payant", ["Cycle 1", "Primaire"]],
-      ["Bandimal", "1065440354", "Créer des morceaux à plusieurs instruments avec des animaux musiciens.", "Payant", ["Cycle 1", "Primaire"]],
-      ["Shazam", "284993459", "Identifie une musique entendue, avec paroles et liens d’écoute.", "Gratuit", ["Collège", "Lycée"]]
-    ] },
-
-  { id: "eps", title: "EPS",
-    intro: "Se voir agir pour progresser : retour vidéo et analyse du geste.",
-    apps: [
-      ["BaM Video Delay", "517673842", "Retour vidéo différé : l’élève réalise son geste puis se voit quelques secondes après sur l’iPad, sans manipulation.", "Payant", ["Collège", "Lycée"]],
-      ["OnForm", "1490334045", "Analyse vidéo : ralenti, image par image, comparaison côte à côte, tracés et angles.", "Freemium", ["Collège", "Lycée"]]
-    ],
-    see: "Cartes IGN (Histoire-géographie) sert à préparer les courses d’orientation. Plickers et Kahoot! (rubrique Évaluer) fonctionnent aussi en EPS." },
-
-  { id: "techno", title: "Technologie, informatique et SNT",
-    intro: "Programmation par blocs ou en texte, robots éducatifs, modélisation 3D.",
-    apps: [
-      ["ScratchJr", "895485086", "Programmation par blocs pour raconter des histoires et animer des personnages, sans savoir lire.", "Gratuit", ["Cycle 1", "Primaire"]],
-      ["Swift Playgrounds", "908519492", "Apprendre à coder en Swift par des énigmes graphiques, puis créer de vraies applis.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["Lightbot : Code Hour", "873943739", "Puzzle de programmation : séquences, procédures et boucles pour guider un robot.", "Gratuit", ["Primaire", "Collège"]],
-      ["Tynker", "805869467", "Parcours de codage par blocs puis en texte, avec projets de jeux.", "Freemium", ["Primaire", "Collège"]],
-      ["Hopscotch", "617098629", "Création de jeux et d’animations par blocs, partagés dans une communauté modérée.", "Freemium", ["Primaire", "Collège"]],
-      ["Bee-Bot", "500131639", "Version virtuelle du robot abeille : programmer des déplacements sur un quadrillage.", "Gratuit", ["Cycle 1", "Primaire"]],
-      ["Blue-Bot", "957753068", "Pilote le robot Blue-Bot en Bluetooth, avec programmation pas à pas ou par séquence.", "Gratuit", ["Cycle 1", "Primaire"]],
-      ["Thymio Suite Mobile", "1481469575", "Programmer le robot Thymio en blocs visuels ou en langages plus avancés.", "Gratuit", ["Primaire", "Collège"]],
-      ["Sphero Edu", "1017847674", "Programmer les robots Sphero par dessin, blocs ou JavaScript.", "Gratuit", ["Primaire", "Collège", "Lycée"]],
-      ["micro:bit", "1092687276", "Programmer et transférer des programmes sur la carte BBC micro:bit en Bluetooth.", "Gratuit", ["Collège", "Lycée"]],
-      ["Spike LEGO Education", "6443545905", "Programmer les kits LEGO Education SPIKE par icônes, blocs ou Python.", "Gratuit", ["Primaire", "Collège"]],
-      ["Tinkercad", "1469440830", "Modélisation 3D simple par assemblage de formes, prête pour l’impression 3D.", "Gratuit", ["Collège", "Lycée"]],
-      ["Delightex Edu (ex-CoSpaces)", "1224622426", "Création de mondes en 3D, réalité virtuelle et augmentée, programmables par blocs.", "Freemium", ["Collège", "Lycée"]],
-      ["Carnets – Jupyter", "1450994949", "Carnets Jupyter et Python hors ligne sur iPad, avec numpy et matplotlib.", "Gratuit", ["Lycée"]],
-      ["Pyto", "1436650069", "Environnement Python complet sur iPad pour écrire et exécuter des scripts.", "Freemium", ["Lycée"]]
-    ] },
-
-  { id: "maternelle", title: "Maternelle (cycle 1)",
-    intro: "Applis adaptées aux plus jeunes, utilisables sans savoir lire.",
-    apps: [
-      ["Khan Academy Kids", "1378467217", "Activités de langage, de nombre et de logique pour les 2 à 8 ans, sans publicité. En anglais.", "Gratuit", ["Cycle 1", "CP"]],
-      ["Bitsboard Flashcards & Games", "516842210", "Imagiers personnalisables avec photos et voix de l’enseignant, déclinés en une vingtaine de jeux.", "Freemium", ["Cycle 1", "Primaire"]]
-    ],
-    see: "Voir aussi ChatterPix Kids, Stop Motion Studio, GraphoGame, LetterSchool, ANTON, Number Frames, Kahoot! Numbers, ScratchJr, Bee-Bot, Blue-Bot et Loopimal, présentés dans les autres rubriques." },
-
-  { id: "inclusion", title: "Inclusion et besoins éducatifs particuliers",
-    intro: "Communication alternative, lecture vocale et accessibilité des écrits.",
-    apps: [
-      ["Proloquo2Go", "308368164", "Communication alternative et améliorée (CAA) par pictogrammes et synthèse vocale, disponible en français.", "Payant", ["Tous niveaux"]],
-      ["Clicker Communicator", "932822854", "Communication par grilles de symboles et de mots, pour les élèves non ou peu verbaux.", "Payant", ["Tous niveaux"]],
-      ["Pictello", "397858008", "Histoires visuelles et emplois du temps illustrés lus à voix haute, pour anticiper les routines.", "Payant", ["Cycle 1", "Primaire"]],
-      ["Voice Dream", "496177674", "Lecture à voix haute de PDF, livres et pages web, avec surlignage synchronisé et polices adaptées.", "Freemium", ["Collège", "Lycée"]],
-      ["Prizmo Go", "1183367390", "Photographie un texte imprimé, le reconnaît et le lit à voix haute ou le traduit.", "Freemium", ["Tous niveaux"]]
-    ],
-    see: "Pensez aussi aux fonctions intégrées de l’iPad (Contenu énoncé, Dictée, Accès guidé) et au Lecteur immersif de OneNote." }
-];/* ---------- Apps du catalogue « Applis en classe » sur l'iPad enseignant ---------- */
+const CAT=(window.APP_DATA||[]), ICO=(window.APP_ICONS||{});/* ---------- Apps du catalogue « Applis en classe » sur l'iPad enseignant ---------- */
 const SB_GL={
   gear:'<path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/><path d="M19.4 13.5l1.8 1.4-1.9 3.3-2.2-.8a7.4 7.4 0 0 1-2 1.2l-.4 2.3h-3.8l-.4-2.3a7.4 7.4 0 0 1-2-1.2l-2.2.8-1.9-3.3 1.8-1.4a7.5 7.5 0 0 1 0-2.9L2.4 9.1l1.9-3.3 2.2.8a7.4 7.4 0 0 1 2-1.2L8.9 3h3.8l.4 2.4a7.4 7.4 0 0 1 2 1.2l2.2-.8 1.9 3.3-1.8 1.4a7.5 7.5 0 0 1 0 3z"/>',
   bag:'<path d="M5 8h14l-1.2 12.5H6.2z"/><path d="M8.8 10.5V7a3.2 3.2 0 0 1 6.4 0v3.5"/>',
@@ -1316,31 +1122,34 @@ const SYS={
 Object.keys(SYS).forEach(k=>{const [n,a,b,gl]=SYS[k];APPS[k]=Object.assign({},APPS[k]||{d:[]},{n,g:[a,b],s:SB_GL[gl]});delete APPS[k].fg;delete APPS[k].l});
 const PAL=[['#7B61FF','#4B32C9'],['#FF8A5B','#D9482B'],['#3CC7A5','#168467'],['#5AA8FF','#2462D6'],['#F25F8A','#B8245A'],['#FFC247','#E08A0E'],['#8E9AAF','#56607A'],['#B07CFF','#7034D6'],['#4FC3E0','#1C7FA5'],['#9BD25B','#5A9A23']];
 const GLYPH_BY_NAME={'Keynote':'playfilm','Pages':'doc','Numbers':'grid','Freeform':'squiggle','iMovie':'clapper','Clips':'film','GarageBand':'music','Shazam':'music','DeepL':'translate','Google Traduction':'translate','WordReference':'translate','Voice Record Pro':'mic','Google Earth':'globe','Mentimeter':'checklist','Socrative Student':'checklist','Plickers':'qr','Goodnotes':'pen','Notability':'pen','Book Creator':'reader','Lumni':'playfilm','Stellarium Mobile':'star'};
-const SHORT={classe:'Gestion de classe',evaluer:'Évaluer',creer:'Créer',ressources:'Ressources',francais:'Français',maths:'Mathématiques',sciences:'Sciences','histoire-geo':'Histoire-géo',langues:'Langues',arts:'Arts plastiques',musique:'Musique',eps:'EPS',techno:'Techno et SNT',maternelle:'Maternelle',inclusion:'Inclusion'};
+const SHORT={francais:'Français',maths:'Mathématiques',sciences:'Sciences','histoire-geo':'Histoire-géo',emc:'EMC',langues:'Langues',arts:'Arts plastiques',musique:'Musique',eps:'EPS',programmation:'Programmation',creer:'Créer',ra:'Réalité augmentée',evaluer:'S’exercer',enseignant:'Outils de l’enseignant',inclusion:'Inclusion'};
 const FOLDERS={};
-let hashN=0;const hsh=t=>{let x=0;for(const c of t)x=(x*31+c.charCodeAt(0))>>>0;return x};
+const hsh=t=>{let x=0;for(const c of t)x=(x*31+c.charCodeAt(0))>>>0;return x};
 CAT.forEach(r=>{
-  FOLDERS[r.id]={n:SHORT[r.id]||r.title,full:r.title,apps:r.apps.map(([name,id,desc,acc,lv])=>{
+  const list=[];
+  (r.groups||[]).forEach(gr=>(gr.apps||[]).forEach(([id,name,desc,uses,acc,lv,coeur])=>{
     let key='c'+id, n=name;
     const sk=Object.keys(SYS).find(q=>SYS[q][0]===name);if(sk)key=sk;
     if(/^Classroom/.test(name)){key='enclasse';n='En classe'}
     else if(name==='Jamf Teacher'){key='jamf'}
     else if(/^Schoolwork/.test(name)){n='Schoolwork'}
+    if(list.includes(key))return;
     const base=APPS[key]||{};
-    const pal=PAL[hsh(name)%PAL.length];
-    const gl=GLYPH_BY_NAME[name];
-    APPS[key]=Object.assign({d:[]},base,{n,cat:{rub:r.title,desc,acc,lv,url:'https://apps.apple.com/fr/app/id'+id}});
-    if(!base.g){APPS[key].g=pal;if(gl)APPS[key].s=SB_GL[gl];else APPS[key].l=name.replace(/^(Kahoot! |GeoGebra |Calculatrice |Orthographe |Dictionnaire )/,'').charAt(0).toUpperCase()}
-    return key;
-  })};
+    APPS[key]=Object.assign({d:[]},base,{n,cat:{rub:r.title,grp:gr.title||'',desc,uses:uses||[],acc,coeur:!!coeur,url:'https://apps.apple.com/fr/app/id'+id}});
+    if(ICO[id])APPS[key].img=ICO[id];
+    else if(!base.g){APPS[key].g=PAL[hsh(name)%PAL.length];const gl=GLYPH_BY_NAME[name];if(gl)APPS[key].s=SB_GL[gl];else APPS[key].l=name.charAt(0).toUpperCase()}
+    list.push(key);
+  }));
+  FOLDERS[r.id]={n:SHORT[r.id]||r.title,full:r.title,apps:list};
 });
-const T_GRID=['calendrier','photos','camera','appstore','selfservice','reglages','f:classe','f:evaluer','f:creer','f:ressources','f:francais','f:maths','f:sciences','f:histoire-geo','f:langues','f:arts','f:musique','f:eps','f:techno','f:maternelle','f:inclusion','amerigo','meteo','horloge'];
+['enclasse','jamf'].forEach(k=>{if(!FOLDERS.enseignant)FOLDERS.enseignant={n:'Outils de l’enseignant',full:'Outils de l’enseignant',apps:[]};if(!FOLDERS.enseignant.apps.includes(k))FOLDERS.enseignant.apps.unshift(k)});
+const T_GRID=['calendrier','photos','camera','appstore','selfservice','reglages'].concat(['enseignant','evaluer','creer','francais','maths','sciences','histoire-geo','emc','langues','arts','musique','eps','programmation','ra','inclusion'].filter(k=>FOLDERS[k]).map(k=>'f:'+k)).concat(['amerigo','meteo','horloge']);
 const T_DOCK=['safari','mail','notes','fichiers'], T_RECENT=['keynote','pages'];
 function otherAppHTML(k){
   const a=APPS[k],c=a.cat;
   return '<div class="t-sb" style="background:#fff"><span>'+hhmm()+'  '+today()+'</span><span class="r"><span>Wi-Fi</span><span>100 %</span></span></div><div class="oth">'+icon(k)+'<b>'+esc(a.n)+'</b>'
-    +(c?'<span class="oth-rub">'+esc(c.rub)+' · '+esc(c.acc)+'</span><p class="oth-desc">'+esc(c.desc)+'</p><a class="oth-link" href="'+c.url+'" target="_blank" rel="noopener">Voir la fiche sur l\'App Store</a>':'')
-    +'<p>Cette app ne fait pas partie de l\'entraînement. Revenez à l\'écran d\'accueil avec la barre en bas de l\'écran, puis ouvrez <strong>En classe</strong> ou <strong>Jamf Teacher</strong>, rangées dans le dossier « Gestion de classe ».</p></div>';
+    +(c?'<span class="oth-rub">'+esc(c.rub)+(c.grp?' · '+esc(c.grp):'')+' · '+esc(c.acc)+(c.coeur?' · ♥ Coup de cœur':'')+'</span><p class="oth-desc">'+esc(c.desc)+'</p>'+(c.uses.length?'<ul class="oth-uses">'+c.uses.map(u=>'<li>'+esc(u)+'</li>').join('')+'</ul>':'')+'<a class="oth-link" href="'+c.url+'" target="_blank" rel="noopener">Voir la fiche sur l\'App Store</a>':'')
+    +'<p>Cette app ne fait pas partie de l\'entraînement. Revenez à l\'écran d\'accueil avec la barre en bas de l\'écran, puis ouvrez <strong>En classe</strong> ou <strong>Jamf Teacher</strong>, rangées dans le dossier « Outils de l’enseignant ».</p></div>';
 }
 
 const norm=t=>t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
